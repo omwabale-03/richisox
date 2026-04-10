@@ -1,0 +1,580 @@
+Build a complete production-ready Next.js 14 e-commerce website for a sock brand called RichySox (domain: RichySox.com). This is a Direct-to-Consumer (D2C) business selling premium socks for men, women, and kids across India.
+
+## Tech Stack
+- Next.js 14 with App Router + TypeScript
+- Tailwind CSS for styling
+- MongoDB + Mongoose for database
+- Zustand for state management (cart + auth), persisted to localStorage
+- JWT for authentication
+- Razorpay for payments (Indian payment gateway — UPI, cards, wallets, net banking)
+- MSG91 for OTP SMS (or Firebase Auth as fallback)
+- Shiprocket for shipping and order tracking
+- Vercel for frontend hosting
+- MongoDB Atlas for database hosting
+- react-hot-toast for notifications
+- react-icons for icons
+- Google Fonts: Playfair Display (headings) + DM Sans (body)
+
+## Brand Identity
+- Brand name: RichySox
+- Logo style: "Richy" in black + "Sox" in gold (#c9a84c)
+- Colors: Black (#0a0a0a), Gold (#c9a84c), Cream (#f4f0e8), White (#fafaf7)
+- Vibe: Luxury + fun + colorful + bold — all at once
+- Font pairing: Playfair Display (serif, for headings) + DM Sans (clean, for body)
+- Design language: Rounded cards (border-radius 16–24px), minimal borders, generous whitespace, gold accents
+
+## Authentication System
+- Mobile OTP login only — no passwords
+- Flow: Enter mobile → receive SMS OTP → verify → logged in or new account created
+- JWT token stored in httpOnly cookie + Zustand store
+- MSG91 integration for SMS (with fallback: print OTP to console in dev mode when API key is empty)
+- Auto-save address for returning customers
+
+## Complete File Structure
+
+### Pages (App Router)
+- app/page.tsx — Homepage
+- app/(shop)/layout.tsx — Shop layout with Navbar + Footer
+- app/(shop)/products/page.tsx — Product listing
+- app/(shop)/products/[id]/page.tsx — Product detail
+- app/(shop)/cart/page.tsx — Cart page
+- app/(shop)/checkout/page.tsx — Checkout (3 steps)
+- app/(shop)/orders/page.tsx — My orders list
+- app/(shop)/orders/[id]/page.tsx — Order detail + tracking
+- app/(auth)/login/page.tsx — Login page
+- app/admin/layout.tsx — Admin sidebar layout
+- app/admin/dashboard/page.tsx — Admin dashboard
+- app/admin/products/page.tsx — Manage products
+- app/admin/orders/page.tsx — Manage orders
+- app/admin/users/page.tsx — View customers
+
+### API Routes
+- app/api/auth/send-otp/route.ts
+- app/api/auth/verify-otp/route.ts
+- app/api/auth/logout/route.ts
+- app/api/auth/me/route.ts
+- app/api/products/route.ts — GET (list with filters) + POST (create)
+- app/api/products/[id]/route.ts — GET + PUT + DELETE
+- app/api/orders/route.ts — GET (my orders) + POST (create)
+- app/api/orders/[id]/route.ts — GET + PATCH
+- app/api/payment/create-order/route.ts — Razorpay order init
+- app/api/payment/verify/route.ts — Verify payment + trigger Shiprocket
+- app/api/addresses/route.ts — GET + POST + DELETE
+- app/api/coupon/route.ts — Apply coupon code
+- app/api/admin/dashboard/route.ts — Stats aggregation
+- app/api/admin/orders/route.ts — All orders with filters
+- app/api/admin/users/route.ts — All users
+
+### Models (Mongoose)
+- models/User.ts — _id, name, mobile, email, role (customer/admin), timestamps
+- models/Address.ts — userId, name, mobile, street, city, state, pincode, country, isDefault
+- models/Product.ts — name, description, price, comparePrice, category (men/women/kids), type (casual/sports/formal/ankle/crew), sizes[], colors[{name,hex}], images[], stock, sku, tags[], isActive, isFeatured, rating, reviewCount
+- models/Order.ts — orderId (auto RS-YYYYMMDD-0001), user, items[], address snapshot, subtotal, discount, shipping, total, coupon, paymentStatus, paymentMethod, razorpayOrderId, razorpayPaymentId, orderStatus, shiprocketOrderId, trackingNumber, courier
+- models/Coupon.ts — code, discountType (percentage/flat), discountValue, minOrderValue, maxDiscount, usageLimit, usedCount, isActive, expiresAt
+
+### Lib Utilities
+- lib/db.ts — MongoDB connection with caching for Next.js hot reload
+- lib/auth.ts — signToken, verifyToken, getUserFromRequest (reads from Bearer header or cookie)
+- lib/otp.ts — generateOTP, storeOTP (in-memory Map), verifyOTP, sendOTP (MSG91 API, falls back to console.log in dev)
+- lib/shiprocket.ts — getShiprocketToken (cached), createShiprocketOrder, trackShiprocketOrder
+- lib/response.ts — ok(), err(), unauthorized(), forbidden() helpers
+
+### Store (Zustand)
+- store/cartStore.ts — items, addItem, removeItem, updateQty, clearCart, subtotal(), itemCount() — persisted as "richysox-cart"
+- store/authStore.ts — user, token, setAuth, logout, isLoggedIn(), isAdmin() — persisted as "richysox-auth"
+
+### Types
+- types/index.ts — IUser, IAddress, IProduct, ICartItem, ICart, IOrder, IOrderItem, ApiResponse, IDashboardStats, all enums
+
+## Page Details
+
+### Homepage (app/page.tsx)
+- Fixed Navbar (logo left, nav links center, cart icon + login right, scroll shadow)
+- Hero section: left side has headline "Step into luxury comfort", subtext, two CTA buttons (Shop Now + Best Sellers), stats row (100+ designs, 50K+ customers, 4.9★ rating). Right side has a CSS grid of 6 coloured sock cards rotated -3deg
+- Scrolling marquee ticker (black background, gold text): "Premium Cotton · Free Shipping ₹499+ · 100+ Designs · Easy Returns · Secure Payments"
+- Category section: 3 tall cards (Men dark navy, Women pink, Kids light blue) with emoji background, hover effect, "Shop Now →" pill
+- Features section (dark background): 4 cards — Premium Quality, Free Shipping ₹499+, Easy Returns 7-day, Secure Payments
+- Testimonials: 6 customer review cards on cream background
+- Gold CTA banner: "Ready to step up your sock game?" + coupon code RICHY10
+- Footer
+
+### Navbar (components/layout/Navbar.tsx)
+- Fixed, backdrop blur on scroll
+- Logo: RichySox with gold "Sox"
+- Links: Men, Women, Kids, Sports, All Socks
+- Actions: Search icon, User dropdown (My Account, My Orders, Admin Panel if admin, Logout), Cart icon with item count badge
+- Hamburger menu for mobile
+
+### Footer (components/layout/Footer.tsx)
+- Dark background (#0a0a0a)
+- 4 columns: Brand + social icons, Shop links, Help links, Contact + payment methods accepted
+- Copyright bottom bar
+
+### Products Page
+- Header with product count and controls: search input, sort dropdown, Filters toggle button
+- Filter panel (collapsible): Category pills (All/Men/Women/Kids), Type pills (All/Casual/Sports/Formal/Ankle/Crew), Clear All button
+- 4-column responsive grid (2 on mobile)
+- Product card: image/emoji placeholder, category+type label, name, star rating, price + comparePrice strikethrough, colour dots, + button to add to cart
+- Skeleton loading state
+- Empty state with clear filters button
+- Pagination
+
+### Product Detail Page
+- Breadcrumb: Home → Products → Name
+- Left: main image + thumbnail row
+- Right: category tag, name, star rating, price with discount badge, description, colour picker (circle swatches with gold border when selected), size picker (pill buttons), quantity stepper, Add to Cart + Buy Now buttons, perks grid (free shipping, returns, secure, ships 24–48hrs)
+
+### Cart Page
+- Empty state with shopping bag icon and Shop Now CTA
+- Items list: product image, name, size+colour, price, quantity stepper, delete button, line total
+- Order summary sidebar: subtotal, shipping (FREE if ≥₹499 else ₹49), "add ₹X more for free shipping" nudge, total, Proceed to Checkout button
+
+### Checkout Page (3 steps with visual step indicator)
+Step 1 — OTP Login:
+- Mobile input with +91 prefix
+- Send OTP button
+- OTP input (large centered digits), Name input (for new users)
+- Verify button
+
+Step 2 — Address:
+- Grid form: Full Name, Mobile, Street (full width), City, State, Pincode
+- Continue to Payment button
+
+Step 3 — Payment:
+- Razorpay payment box (locked icon, supported methods listed)
+- Coupon code input + Apply button
+- Pay ₹{total} button — loads Razorpay checkout.js script dynamically, opens popup, on success calls /api/payment/verify, then clears cart and redirects to order confirmation
+
+### Orders List Page
+- Requires login (redirect to /login if not authenticated)
+- Each order: Order ID (monospace), customer name, product image thumbnails (max 3 + overflow count), date, total, status badge (colour coded)
+- Clickable rows → order detail
+
+### Order Detail Page
+- Breadcrumb ← Orders / RS-YYYYMMDD-XXXX + status badge
+- Tracking timeline: 5 steps (Pending → Confirmed → Processing → Shipped → Delivered) with gold filled circles for completed steps and connecting lines
+- Tracking number + courier shown if available
+- Items list with images
+- Delivery address card
+- Payment summary card (subtotal, discount, shipping, total, payment status)
+
+### Login Page
+- Centered card on cream background
+- RichySox logo at top
+- Mobile + OTP flow same as checkout step 1
+- Redirect to /admin/dashboard if admin, else to /
+
+### Admin Dashboard
+- Requires admin role
+- 4 metric cards: Total Revenue (₹), Total Orders, Customers, Products
+- Recent Orders table with customer name, order ID, total, status
+- Orders by Status horizontal bar chart (manual CSS)
+- Quick links to Products, Orders, Users management
+
+### Admin Products Page
+- Search input + Add Product button
+- Table: product image thumbnail, name + SKU, category+type, price + compare price, stock (red if <10), active badge, edit + delete buttons
+- Modal form overlay for create/edit: all product fields including checkboxes for isActive and isFeatured, image URLs comma-separated, sizes comma-separated
+
+### Admin Orders Page
+- Search by order ID + filter by status dropdown
+- Table: order ID (gold monospace), customer name+mobile, item count, total, payment status badge, order status dropdown (inline update), date, View link
+- Status dropdown updates immediately via PATCH API call
+
+### Admin Users Page
+- Search by name/mobile/email
+- Table: avatar initials circle, name, mobile, email, role badge (gold for admin), join date
+
+### Admin Sidebar Layout
+- Fixed left sidebar, dark background
+- Logo at top
+- Nav items: Dashboard, Products, Orders, Customers — active item has gold background
+- Bottom: View Store link, Logout button, user name + mobile
+
+## Business Logic Details
+
+### Pricing
+- Free shipping on orders ≥ ₹499, else ₹49 shipping fee
+- Coupon types: percentage (with optional maxDiscount cap) or flat amount
+- Order ID format: RS-YYYYMMDD-0001 (auto-incremented, generated in pre-save hook)
+
+### Payment Flow
+1. POST /api/orders → creates order with status "pending", reduces stock
+2. POST /api/payment/create-order → creates Razorpay order, saves razorpayOrderId
+3. Razorpay popup opens in browser
+4. On success: POST /api/payment/verify → verifies HMAC signature → updates order to paid+confirmed → calls Shiprocket API to create shipment
+
+### OTP Flow
+- generateOTP(): 6-digit random number
+- storeOTP(): saves to in-memory Map with 5-minute expiry
+- verifyOTP(): checks Map, deletes after successful verify
+- sendOTP(): calls MSG91 API if AUTH_KEY present, else console.log for dev
+- On verify: find user by mobile or create new one, return JWT
+
+### Admin Auth
+- All /api/admin/* routes check getUserFromRequest → must have role === "admin"
+- Admin sidebar checks isAdmin() from Zustand store, redirects to / if not admin
+
+## Styling Details
+- All pages use cream (#f4f0e8) as page background, white cards
+- Buttons: primary = black bg → gold on hover; secondary = gold bg → black on hover
+- All pill buttons use rounded-full
+- Product/order cards use rounded-2xl (16px) with hover:-translate-y-1 shadow effect
+- Skeleton loading uses shimmer animation (background-position animation)
+- Scrollbar styled: 6px width, gold thumb
+- Mobile-first responsive: 1 col → 2 col → 3/4 col grids
+
+## Environment Variables Required (.env.local)
+MONGODB_URI=
+JWT_SECRET=
+JWT_EXPIRES_IN=7d
+MSG91_AUTH_KEY=
+MSG91_TEMPLATE_ID=
+MSG91_SENDER_ID=RICHYX
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+NEXT_PUBLIC_RAZORPAY_KEY_ID=
+SHIPROCKET_EMAIL=
+SHIPROCKET_PASSWORD=
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME=RichySox
+
+## Package Dependencies
+npm install mongoose bcryptjs jsonwebtoken razorpay axios react-hot-toast react-icons zustand
+npm install @types/bcryptjs @types/jsonwebtoken
+
+## Additional Requirements
+- All API routes return { success: boolean, data?, message?, error? }
+- Soft delete products (set isActive: false, never hard delete)
+- Cart persisted in localStorage via Zustand persist middleware
+- Auth token stored in both httpOnly cookie (for SSR) and Zustand store (for client)
+- MongoDB connection cached on global object to survive Next.js hot reloads
+- Product full-text search index on name + description + tags fields
+- Order stock reduction happens at order creation, not at payment
+- Shiprocket order creation is non-fatal (wrapped in try/catch, order still succeeds if Shiprocket fails)
+- tailwind.config.ts must include fontFamily for playfair and sans, plus marquee keyframe animation
+- globals.css must include skeleton shimmer animation and custom scrollbar styles
+- Deliver all files as a valid ZIP using Python zipfile module (not shell zip command)
+
+
+RichySox :
+
+Below is a clean documentation structure you can copy directly into Word for your RichySox E-commerce Website Project.
+It explains everything from scratch → deployment → scaling.
+
+RichySox E-Commerce Website Development Documentation
+1. Project Overview
+Project Name: RichySox
+Domain: RichySox.com
+Type: Direct-to-Consumer (D2C) E-commerce Platform
+Product Category: Premium Socks (Fashion, Sports, Casual)
+Objective
+The objective of the RichySox platform is to build a high-performance scalable e-commerce website that allows customers to easily browse, purchase, and track orders of socks and future apparel products.
+The platform will provide:
+•	Fast checkout experience
+•	OTP based login system
+•	Auto-address retrieval for returning customers
+•	Secure payment processing
+•	Automated shipping integration
+•	High traffic handling capability
+
+2. Business Requirements
+Functional Requirements
+The website must provide the following features:
+1.	Product browsing
+2.	Product search and filtering
+3.	Product detail page
+4.	Shopping cart functionality
+5.	Checkout process
+6.	OTP based login system
+7.	Saved address auto-fill
+8.	Online payment gateway integration
+9.	Order tracking system
+10.	Admin dashboard for inventory management
+11.	Discount and coupon system
+12.	Customer order history
+
+Non-Functional Requirements
+1.	High scalability
+2.	Secure payment processing
+3.	Mobile responsive design
+4.	Fast page loading speed
+5.	Secure authentication
+6.	High availability
+
+3. System Architecture
+The RichySox system will follow a three-tier architecture:
+1. Presentation Layer (Frontend)
+Handles user interface and user interactions.
+Technologies:
+•	React.js / Next.js
+•	HTML5
+•	CSS3
+•	Tailwind CSS
+•	JavaScript
+Responsibilities:
+•	UI rendering
+•	User interaction
+•	API communication
+•	Cart management
+
+2. Application Layer (Backend)
+Handles business logic and API processing.
+Technologies:
+•	Node.js
+•	Express.js
+Responsibilities:
+•	Authentication
+•	Order processing
+•	Payment verification
+•	Address management
+•	API handling
+
+3. Data Layer (Database)
+Stores all application data.
+Technology:
+•	MongoDB
+Stored Data:
+•	User profiles
+•	Product information
+•	Orders
+•	Addresses
+•	Payments
+
+4. Technology Stack
+Frontend
+•	React.js / Next.js
+•	Tailwind CSS
+•	JavaScript
+•	Axios API requests
+Backend
+•	Node.js
+•	Express.js
+Database
+•	MongoDB
+Authentication
+OTP based mobile login
+Payment Gateway
+Integration with Razorpay
+Shipping System
+Integration with Shiprocket
+Hosting
+•	AWS EC2
+•	Vercel (Frontend)
+•	Cloudflare CDN
+
+5. Website Modules
+5.1 Homepage
+Displays brand identity and product highlights.
+Features:
+•	Banner section
+•	Featured products
+•	Category navigation
+•	Customer reviews
+•	Promotional offers
+
+
+
+5.2 Product Listing Page
+Displays all products.
+Features:
+•	Product grid layout
+•	Filter options
+•	Price sorting
+•	Category selection
+
+5.3 Product Detail Page
+Displays product information.
+Features:
+•	Product images
+•	Price
+•	Description
+•	Size options
+•	Add to cart button
+
+5.4 Shopping Cart
+Temporary storage of selected products.
+Features:
+•	Product list
+•	Quantity modification
+•	Remove item
+•	Subtotal calculation
+
+5.5 Checkout System
+Handles order placement.
+Features:
+•	OTP login
+•	Address selection
+•	Payment selection
+•	Order summary
+
+6. OTP Login System
+Customers login using mobile number.
+Process
+1.	Customer enters mobile number
+2.	OTP is generated
+3.	OTP sent via SMS
+4.	Customer verifies OTP
+5.	User account created or fetched
+Possible SMS providers:
+•	MSG91
+•	Twilio
+•	Firebase
+
+
+11.	Address Auto-Fill System
+Returning customers do not need to re-enter address.
+Process
+1.	User enters mobile number
+2.	Backend checks database
+3.	If mobile exists → fetch saved address
+4.	Address auto fills in checkout
+Example Database Record
+User Table
+UserID
+MobileNumber
+Name
+Email
+
+Address Table
+AddressID
+UserID
+Street
+City
+State
+Pincode
+Country
+________________________________________
+12.	Payment Gateway Integration
+Secure payment processing using Razorpay.
+Supported payment methods:
+•	UPI
+•	Debit card
+•	Credit card
+•	Net banking
+•	Wallet payments
+Payment flow:
+1.	Customer selects payment method
+2.	Payment processed via Razorpay
+3.	Payment verification
+4.	Order confirmation
+________________________________________
+9. Shipping Integration
+Automated logistics using Shiprocket.
+Features:
+•	Courier allocation
+•	Shipping label generation
+•	Order tracking
+•	Delivery updates
+________________________________________
+10. Admin Dashboard
+Admin panel for managing store operations.
+Features:
+•	Add products
+•	Update product details
+•	View orders
+•	Manage inventory
+•	Apply discounts
+•	Sales analytics
+________________________________________
+11. Database Structure
+User Collection
+User
+-----
+user_id
+name
+mobile_number
+email
+created_at
+________________________________________
+
+
+
+
+
+
+
+Address Collection
+Address
+-------
+address_id
+user_id
+street
+city
+state
+pincode
+country
+________________________________________
+Product Collection
+Product
+-------
+product_id
+name
+price
+description
+stock
+category
+image_url
+
+
+________________________________________
+Order Collection
+Order
+-----
+order_id
+user_id
+product_id
+quantity
+total_price
+payment_status
+order_status
+created_at
+________________________________________
+12. Security Measures
+To ensure platform security the following measures will be implemented:
+•	HTTPS encryption
+•	Secure payment gateway
+•	OTP authentication
+•	API rate limiting
+•	Data validation
+
+
+
+
+13. Deployment Architecture
+Deployment will follow cloud infrastructure.
+Frontend hosting:
+•	Vercel
+Backend hosting:
+•	AWS EC2
+Database hosting:
+•	MongoDB Atlas
+Content Delivery:
+•	Cloudflare CDN
+________________________________________
+14. Performance Optimization
+To handle large traffic:
+•	CDN caching
+•	Image compression
+•	Lazy loading
+•	Database indexing
+•	API optimization
+
+
+
+
+
+
+15. Future Enhancements
+Future features planned for RichySox platform:
+•	Mobile application
+•	AI product recommendations
+•	Subscription sock service
+•	Loyalty reward system
+•	Multi-product categories
+•	International shipping
+
+16. Conclusion
+The RichySox e-commerce platform is designed to provide a modern, scalable, and high-performance online shopping experience. By integrating secure payments, automated shipping, and efficient checkout systems, the platform aims to deliver convenience to customers while supporting business growth.
+
+
