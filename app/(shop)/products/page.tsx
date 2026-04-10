@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -144,7 +144,7 @@ const DEMO_PRODUCTS: IProduct[] = [
   },
 ];
 
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const addItem = useCartStore((s) => s.addItem);
 
@@ -355,5 +355,13 @@ export default function ProductsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f4f0e8]" />}>
+      <ProductsContent />
+    </Suspense>
   );
 }

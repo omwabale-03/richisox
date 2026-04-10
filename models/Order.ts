@@ -34,6 +34,8 @@ export interface IOrderDocument extends Document {
   shiprocketOrderId?: string;
   trackingNumber?: string;
   courier?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const OrderSchema = new Schema<IOrderDocument>(

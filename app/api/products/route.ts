@@ -1,8 +1,9 @@
 import { NextRequest } from "next/server";
+import { SortOrder } from "mongoose";
 import { connectDB } from "@/lib/db";
 import { getUserFromRequest } from "@/lib/auth";
 import Product from "@/models/Product";
-import { ok, badRequest, forbidden, err } from "@/lib/response";
+import { ok, forbidden, err } from "@/lib/response";
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function GET(req: NextRequest) {
     if (isFeatured === "true") query.isFeatured = true;
     if (search) query.$text = { $search: search };
 
-    const sortMap: Record<string, Record<string, number>> = {
+    const sortMap: Record<string, Record<string, SortOrder>> = {
       newest: { createdAt: -1 },
       price_asc: { price: 1 },
       price_desc: { price: -1 },

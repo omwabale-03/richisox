@@ -4,13 +4,14 @@ import { getUserFromRequest } from "@/lib/auth";
 import Order from "@/models/Order";
 import { ok, unauthorized, notFound, forbidden, err } from "@/lib/response";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = getUserFromRequest(req);
     if (!user) return unauthorized();
 
+    const { id } = await params;
     await connectDB();
-    const order = await Order.findById(params.id).populate("user", "name mobile");
+    const order = await Order.findById(id).populate("user", "name mobile");
     if (!order) return notFound("Order not found");
 
     if (order.user._id.toString() !== user.userId && user.role !== "admin") {
@@ -23,14 +24,15 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = getUserFromRequest(req);
     if (!user) return unauthorized();
 
+    const { id } = await params;
     await connectDB();
     const body = await req.json();
-    const order = await Order.findById(params.id);
+    const order = await Order.findById(id);
     if (!order) return notFound("Order not found");
 
     if (user.role !== "admin" && order.user.toString() !== user.userId) {

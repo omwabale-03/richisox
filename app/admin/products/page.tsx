@@ -23,8 +23,15 @@ const DEMO_PRODUCTS: IProduct[] = [
   },
 ];
 
-const emptyProduct = {
-  name: "", description: "", price: 0, comparePrice: 0, category: "men" as const, type: "crew" as const,
+type ProductForm = {
+  name: string; description: string; price: number; comparePrice: number;
+  category: IProduct["category"]; type: IProduct["type"];
+  sizes: string; colors: string; images: string; stock: number; sku: string; tags: string;
+  isActive: boolean; isFeatured: boolean;
+};
+
+const emptyProduct: ProductForm = {
+  name: "", description: "", price: 0, comparePrice: 0, category: "men", type: "crew",
   sizes: "S,M,L,XL", colors: "", images: "", stock: 0, sku: "", tags: "", isActive: true, isFeatured: false,
 };
 
@@ -33,7 +40,7 @@ export default function AdminProductsPage() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState<IProduct | null>(null);
-  const [form, setForm] = useState(emptyProduct);
+  const [form, setForm] = useState<ProductForm>(emptyProduct);
 
   const filtered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()) || p.sku.includes(search)

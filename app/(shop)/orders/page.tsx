@@ -26,7 +26,7 @@ const DEMO_ORDERS: IOrder[] = [
     items: [
       { productId: "1", name: "Luxury Crew Socks", image: "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=80&h=80&fit=crop", price: 299, quantity: 2, size: "M", color: "Black" },
     ],
-    address: { name: "Om Wabale", mobile: "9876543210", street: "123 MG Road", city: "Pune", state: "Maharashtra", pincode: "411001", country: "India" },
+    address: { _id: "addr1", userId: "u1", name: "Om Wabale", mobile: "9876543210", street: "123 MG Road", city: "Pune", state: "Maharashtra", pincode: "411001", country: "India", isDefault: true },
     subtotal: 598,
     discount: 0,
     shipping: 0,
@@ -44,7 +44,7 @@ const DEMO_ORDERS: IOrder[] = [
     items: [
       { productId: "2", name: "Sports Performance Socks", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop", price: 199, quantity: 3, size: "L", color: "White" },
     ],
-    address: { name: "Om Wabale", mobile: "9876543210", street: "123 MG Road", city: "Pune", state: "Maharashtra", pincode: "411001", country: "India" },
+    address: { _id: "addr1", userId: "u1", name: "Om Wabale", mobile: "9876543210", street: "123 MG Road", city: "Pune", state: "Maharashtra", pincode: "411001", country: "India", isDefault: true },
     subtotal: 597,
     discount: 59,
     shipping: 0,
