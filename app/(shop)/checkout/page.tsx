@@ -147,7 +147,8 @@ export default function CheckoutPage() {
       document.body.appendChild(script);
 
       script.onload = () => {
-        const rzp = new (window as Window & { Razorpay: new (opts: Record<string, unknown>) => { open: () => void } }).Razorpay({
+        type RazorpayWindow = { Razorpay: new (opts: Record<string, unknown>) => { open: () => void } };
+        const rzp = new (window as unknown as RazorpayWindow).Razorpay({
           key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
           amount: razorpayData.data.amount,
           currency: "INR",
