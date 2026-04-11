@@ -76,7 +76,7 @@ export default function CheckoutPage() {
     try {
       const { data } = await axios.post("/api/auth/verify-otp", { mobile, otp, name });
       setAuth(data.data.user, data.data.token);
-      toast.success("Welcome to RichySox! 🎉");
+      toast.success("Welcome to RichySox!");
       setStep(2);
     } catch {
       toast.error("Invalid OTP. Please try again.");
@@ -167,7 +167,7 @@ export default function CheckoutPage() {
               { headers: { Authorization: `Bearer ${token}` } }
             );
             clearCart();
-            toast.success("Payment successful! Order placed 🎉");
+            toast.success("Payment successful! Order placed!");
             router.push(`/orders/${orderData.data._id}`);
           },
           prefill: { name: address.name, contact: address.mobile },
@@ -183,9 +183,9 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f0e8]">
+    <div className="min-h-screen bg-brand-cream">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <h1 className="text-3xl font-playfair font-bold text-[#0a0a0a] mb-8 text-center">Checkout</h1>
+        <h1 className="text-3xl font-playfair font-bold text-brand-brown mb-8 text-center">Checkout</h1>
 
         {/* Step Indicator */}
         <div className="flex items-center justify-center gap-4 mb-10">
@@ -195,20 +195,20 @@ export default function CheckoutPage() {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
                     step > s.id
-                      ? "bg-[#c9a84c] text-[#0a0a0a]"
+                      ? "bg-brand-gold text-white"
                       : step === s.id
-                      ? "bg-[#0a0a0a] text-white"
-                      : "bg-[#e8e0d0] text-gray-400"
+                      ? "bg-brand-brown text-brand-cream-light"
+                      : "bg-brand-cream-dark text-brand-brown-light/40"
                   }`}
                 >
                   {step > s.id ? <Check className="w-5 h-5" /> : s.id}
                 </div>
-                <span className={`text-sm font-medium hidden sm:block ${step === s.id ? "text-[#0a0a0a]" : "text-gray-400"}`}>
+                <span className={`text-sm font-medium hidden sm:block ${step === s.id ? "text-brand-brown" : "text-brand-brown-light/40"}`}>
                   {s.label}
                 </span>
               </div>
               {i < steps.length - 1 && (
-                <div className={`w-16 h-0.5 ${step > s.id ? "bg-[#c9a84c]" : "bg-[#e8e0d0]"}`} />
+                <div className={`w-16 h-0.5 ${step > s.id ? "bg-brand-gold" : "bg-brand-cream-dark"}`} />
               )}
             </div>
           ))}
@@ -219,21 +219,21 @@ export default function CheckoutPage() {
           <div className="lg:col-span-3">
             {/* Step 1: OTP Login */}
             {step === 1 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm">
-                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <Phone className="w-5 h-5 text-[#c9a84c]" /> Login with OTP
+              <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
+                <h2 className="text-xl font-semibold text-brand-brown mb-6 flex items-center gap-2">
+                  <Phone className="w-5 h-5 text-brand-gold" /> Login with OTP
                 </h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                    <label className="block text-sm font-medium text-brand-brown mb-1">Mobile Number</label>
                     <div className="flex">
-                      <span className="flex items-center px-3 border border-r-0 border-[#e8e0d0] rounded-l-xl bg-[#f4f0e8] text-sm text-gray-600">+91</span>
+                      <span className="flex items-center px-3 border border-r-0 border-brand-cream-dark rounded-l-xl bg-brand-cream text-sm text-brand-brown-light">+91</span>
                       <input
                         type="tel"
                         placeholder="10-digit mobile number"
                         value={mobile}
                         onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                        className="flex-1 px-4 py-3 border border-[#e8e0d0] rounded-r-xl focus:outline-none focus:ring-2 focus:ring-[#c9a84c] text-sm"
+                        className="flex-1 px-4 py-3 border border-brand-cream-dark rounded-r-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm bg-white text-brand-brown"
                       />
                     </div>
                   </div>
@@ -241,42 +241,42 @@ export default function CheckoutPage() {
                     <button
                       onClick={handleSendOtp}
                       disabled={loading}
-                      className="w-full py-3 bg-[#0a0a0a] text-white rounded-xl font-semibold hover:bg-[#c9a84c] transition-colors disabled:opacity-50"
+                      className="w-full py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
                     >
                       {loading ? "Sending..." : "Send OTP"}
                     </button>
                   ) : (
                     <>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Enter OTP</label>
+                        <label className="block text-sm font-medium text-brand-brown mb-1">Enter OTP</label>
                         <input
                           type="text"
                           placeholder="6-digit OTP"
                           value={otp}
                           onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                          className="w-full px-4 py-3 border border-[#e8e0d0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#c9a84c] text-center text-xl tracking-widest"
+                          className="w-full px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-center text-xl tracking-widest bg-white text-brand-brown"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                        <label className="block text-sm font-medium text-brand-brown mb-1">Your Name</label>
                         <input
                           type="text"
                           placeholder="Full name (for new users)"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          className="w-full px-4 py-3 border border-[#e8e0d0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#c9a84c] text-sm"
+                          className="w-full px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm bg-white text-brand-brown"
                         />
                       </div>
                       <button
                         onClick={handleVerifyOtp}
                         disabled={loading}
-                        className="w-full py-3 bg-[#c9a84c] text-[#0a0a0a] rounded-xl font-semibold hover:bg-[#b8952e] transition-colors disabled:opacity-50"
+                        className="w-full py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
                       >
                         {loading ? "Verifying..." : "Verify OTP"}
                       </button>
                       <button
                         onClick={() => { setOtpSent(false); setOtp(""); }}
-                        className="w-full py-2 text-sm text-gray-500 hover:text-[#0a0a0a]"
+                        className="w-full py-2 text-sm text-brand-brown-light/60 hover:text-brand-brown"
                       >
                         Resend OTP
                       </button>
@@ -288,9 +288,9 @@ export default function CheckoutPage() {
 
             {/* Step 2: Address */}
             {step === 2 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm">
-                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-[#c9a84c]" /> Delivery Address
+              <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
+                <h2 className="text-xl font-semibold text-brand-brown mb-6 flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-brand-gold" /> Delivery Address
                 </h2>
                 <div className="grid grid-cols-2 gap-4">
                   {[
@@ -302,19 +302,19 @@ export default function CheckoutPage() {
                     { key: "pincode", label: "Pincode", span: 1, type: "text" },
                   ].map(({ key, label, span, type }) => (
                     <div key={key} className={span === 2 ? "col-span-2" : ""}>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                      <label className="block text-sm font-medium text-brand-brown mb-1">{label}</label>
                       <input
                         type={type}
                         value={address[key as keyof typeof address]}
                         onChange={(e) => setAddress((a) => ({ ...a, [key]: e.target.value }))}
-                        className="w-full px-4 py-3 border border-[#e8e0d0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#c9a84c] text-sm"
+                        className="w-full px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm bg-white text-brand-brown"
                       />
                     </div>
                   ))}
                 </div>
                 <button
                   onClick={handleAddressNext}
-                  className="w-full mt-6 py-3 bg-[#0a0a0a] text-white rounded-xl font-semibold hover:bg-[#c9a84c] transition-colors"
+                  className="w-full mt-6 py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors"
                 >
                   Continue to Payment
                 </button>
@@ -323,18 +323,18 @@ export default function CheckoutPage() {
 
             {/* Step 3: Payment */}
             {step === 3 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm">
-                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-[#c9a84c]" /> Secure Payment
+              <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
+                <h2 className="text-xl font-semibold text-brand-brown mb-6 flex items-center gap-2">
+                  <Lock className="w-5 h-5 text-brand-gold" /> Secure Payment
                 </h2>
-                <div className="bg-[#f4f0e8] rounded-xl p-4 mb-6">
+                <div className="bg-brand-cream rounded-xl p-4 mb-6">
                   <div className="flex items-center gap-2 mb-2">
-                    <Lock className="w-4 h-4 text-green-600" />
-                    <span className="text-sm font-medium text-green-700">100% Secure via Razorpay</span>
+                    <Lock className="w-4 h-4 text-green-700" />
+                    <span className="text-sm font-medium text-green-800">100% Secure via Razorpay</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {["UPI", "Debit Card", "Credit Card", "Net Banking", "Wallets"].map((m) => (
-                      <span key={m} className="px-3 py-1 bg-white rounded-full text-xs font-medium text-gray-600 border border-[#e8e0d0]">
+                      <span key={m} className="px-3 py-1 bg-brand-cream-light rounded-full text-xs font-medium text-brand-brown-light border border-brand-cream-dark">
                         {m}
                       </span>
                     ))}
@@ -343,7 +343,7 @@ export default function CheckoutPage() {
 
                 {/* Coupon */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Coupon Code</label>
+                  <label className="block text-sm font-medium text-brand-brown mb-2">Coupon Code</label>
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -351,23 +351,23 @@ export default function CheckoutPage() {
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                       disabled={couponApplied}
-                      className="flex-1 px-4 py-3 border border-[#e8e0d0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#c9a84c] text-sm font-mono disabled:bg-gray-50"
+                      className="flex-1 px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm font-mono bg-white text-brand-brown disabled:bg-brand-cream/50"
                     />
                     <button
                       onClick={handleApplyCoupon}
                       disabled={couponApplied || !couponCode}
-                      className="px-6 py-3 bg-[#c9a84c] text-[#0a0a0a] rounded-xl font-semibold hover:bg-[#b8952e] transition-colors disabled:opacity-50"
+                      className="px-6 py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
                     >
-                      {couponApplied ? "Applied ✓" : "Apply"}
+                      {couponApplied ? "Applied" : "Apply"}
                     </button>
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">Try code: RICHY10</p>
+                  <p className="text-xs text-brand-brown-light/50 mt-1">Try code: RICHY10</p>
                 </div>
 
                 <button
                   onClick={handlePayment}
                   disabled={loading}
-                  className="w-full py-4 bg-[#0a0a0a] text-white rounded-xl font-semibold text-lg hover:bg-[#c9a84c] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-brand-brown text-brand-cream-light rounded-xl font-semibold text-lg hover:bg-brand-gold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <Lock className="w-5 h-5" />
                   {loading ? "Processing..." : `Pay ₹${total.toFixed(0)}`}
@@ -378,34 +378,34 @@ export default function CheckoutPage() {
 
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl p-6 shadow-sm sticky top-24">
-              <h3 className="font-playfair font-bold text-[#0a0a0a] mb-4">Order Summary</h3>
+            <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark sticky top-24">
+              <h3 className="font-playfair font-bold text-brand-brown mb-4">Order Summary</h3>
               <div className="space-y-3 mb-4 max-h-48 overflow-y-auto">
                 {items.map((item) => (
                   <div key={`${item.product._id}-${item.size}`} className="flex justify-between text-sm">
-                    <span className="text-gray-600 truncate flex-1 mr-2">
-                      {item.product.name} × {item.quantity}
+                    <span className="text-brand-brown-light/60 truncate flex-1 mr-2">
+                      {item.product.name} &times; {item.quantity}
                     </span>
-                    <span className="font-medium">₹{(item.product.price * item.quantity).toFixed(0)}</span>
+                    <span className="font-medium text-brand-brown">₹{(item.product.price * item.quantity).toFixed(0)}</span>
                   </div>
                 ))}
               </div>
-              <div className="border-t border-[#e8e0d0] pt-4 space-y-2">
-                <div className="flex justify-between text-sm text-gray-500">
+              <div className="border-t border-brand-cream-dark pt-4 space-y-2">
+                <div className="flex justify-between text-sm text-brand-brown-light/60">
                   <span>Subtotal</span>
                   <span>₹{sub.toFixed(0)}</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-sm text-green-600">
+                  <div className="flex justify-between text-sm text-green-700">
                     <span>Coupon Discount</span>
                     <span>-₹{discount.toFixed(0)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-sm text-brand-brown-light/60">
                   <span>Shipping</span>
                   <span>{shipping === 0 ? "FREE" : `₹${shipping}`}</span>
                 </div>
-                <div className="flex justify-between font-bold text-[#0a0a0a] pt-2 border-t border-[#e8e0d0]">
+                <div className="flex justify-between font-bold text-brand-brown pt-2 border-t border-brand-cream-dark">
                   <span>Total</span>
                   <span>₹{total.toFixed(0)}</span>
                 </div>

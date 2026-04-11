@@ -43,7 +43,7 @@ export default function AdminOrdersPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-playfair font-bold text-[#0a0a0a]">Orders</h1>
+        <h1 className="text-3xl font-playfair font-bold text-brand-brown">Orders</h1>
         <p className="text-gray-500 mt-1">{orders.length} total orders</p>
       </div>
 
@@ -56,13 +56,13 @@ export default function AdminOrdersPage() {
             placeholder="Search by Order ID or customer..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 pr-4 py-2.5 rounded-xl border border-[#e8e0d0] bg-white focus:outline-none focus:ring-2 focus:ring-[#c9a84c] text-sm w-72"
+            className="pl-10 pr-4 py-2.5 rounded-xl border border-brand-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm w-72"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2.5 rounded-xl border border-[#e8e0d0] bg-white focus:outline-none focus:ring-2 focus:ring-[#c9a84c] text-sm"
+          className="px-4 py-2.5 rounded-xl border border-brand-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm"
         >
           <option value="all">All Statuses</option>
           {statusOptions.map((s) => <option key={s} value={s} className="capitalize">{s}</option>)}
@@ -73,7 +73,7 @@ export default function AdminOrdersPage() {
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#f4f0e8]">
+            <thead className="bg-brand-cream">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Order ID</th>
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Customer</th>
@@ -85,14 +85,14 @@ export default function AdminOrdersPage() {
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">View</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#f4f0e8]">
+            <tbody className="divide-y divide-brand-cream">
               {filtered.map((order) => (
-                <tr key={order._id} className="hover:bg-[#f4f0e8]/30 transition-colors">
+                <tr key={order._id} className="hover:bg-brand-cream/30 transition-colors">
                   <td className="px-6 py-4">
-                    <span className="font-mono text-sm font-semibold text-[#c9a84c]">{order.id}</span>
+                    <span className="font-mono text-sm font-semibold text-brand-gold">{order.id}</span>
                   </td>
                   <td className="px-6 py-4">
-                    <p className="text-sm font-medium text-[#0a0a0a]">{order.customer}</p>
+                    <p className="text-sm font-medium text-brand-brown">{order.customer}</p>
                     <p className="text-xs text-gray-400">{order.mobile}</p>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{order.items}</td>
@@ -106,7 +106,7 @@ export default function AdminOrdersPage() {
                     <select
                       value={order.orderStatus}
                       onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                      className={`px-2 py-1 rounded-lg text-xs font-semibold border-0 focus:outline-none focus:ring-2 focus:ring-[#c9a84c] capitalize cursor-pointer ${statusColors[order.orderStatus]}`}
+                      className={`px-2 py-1 rounded-lg text-xs font-semibold border-0 focus:outline-none focus:ring-2 focus:ring-brand-gold capitalize cursor-pointer ${statusColors[order.orderStatus]}`}
                     >
                       {statusOptions.map((s) => (
                         <option key={s} value={s} className="bg-white text-gray-700 capitalize">{s}</option>

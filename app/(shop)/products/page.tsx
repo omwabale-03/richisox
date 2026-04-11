@@ -90,7 +90,7 @@ const DEMO_PRODUCTS: IProduct[] = [
     type: "crew",
     sizes: ["XS", "S"],
     colors: [{ name: "Rainbow", hex: "#ff9800" }],
-    images: ["https://images.unsplash.com/photo-1519049994081-3a6f4df0cd3c?w=400&h=400&fit=crop"],
+    images: ["https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=400&h=400&fit=crop"],
     stock: 60,
     sku: "RS-004",
     tags: ["kids", "rainbow", "colorful"],
@@ -131,7 +131,7 @@ const DEMO_PRODUCTS: IProduct[] = [
     type: "casual",
     sizes: ["S", "M", "L"],
     colors: [{ name: "Multicolor", hex: "#9c27b0" }],
-    images: ["https://images.unsplash.com/photo-1611458285752-697316c05caa?w=400&h=400&fit=crop"],
+    images: ["https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=400&h=400&fit=crop"],
     stock: 80,
     sku: "RS-006",
     tags: ["casual", "stripe"],
@@ -148,8 +148,7 @@ function ProductsContent() {
   const searchParams = useSearchParams();
   const addItem = useCartStore((s) => s.addItem);
 
-  const [products, setProducts] = useState<IProduct[]>(DEMO_PRODUCTS);
-  const [loading, setLoading] = useState(false);
+  const [products] = useState<IProduct[]>(DEMO_PRODUCTS);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState(searchParams.get("category") || "all");
   const [type, setType] = useState(searchParams.get("type") || "all");
@@ -176,29 +175,29 @@ function ProductsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f0e8]">
+    <div className="min-h-screen bg-brand-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-playfair font-bold text-[#0a0a0a]">All Socks</h1>
-            <p className="text-gray-500 text-sm mt-1">{filtered.length} products</p>
+            <h1 className="text-3xl font-playfair font-bold text-brand-brown">All Socks</h1>
+            <p className="text-brand-brown-light/60 text-sm mt-1">{filtered.length} products</p>
           </div>
           <div className="sm:ml-auto flex items-center gap-3">
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-brand-cream-dark" />
               <input
                 type="text"
                 placeholder="Search socks..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 rounded-xl border border-[#e8e0d0] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#c9a84c] w-64"
+                className="pl-10 pr-4 py-2 rounded-xl border border-brand-cream-dark bg-brand-cream-light text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold w-64 text-brand-brown"
               />
             </div>
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="px-4 py-2 rounded-xl border border-[#e8e0d0] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#c9a84c]"
+              className="px-4 py-2 rounded-xl border border-brand-cream-dark bg-brand-cream-light text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown"
             >
               {sortOptions.map((o) => (
                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -206,7 +205,7 @@ function ProductsContent() {
             </select>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#e8e0d0] bg-white text-sm hover:bg-[#f4f0e8] transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-brand-cream-dark bg-brand-cream-light text-sm hover:bg-brand-cream transition-colors text-brand-brown"
             >
               <SlidersHorizontal className="w-4 h-4" />
               Filters
@@ -216,10 +215,10 @@ function ProductsContent() {
 
         {/* Filters */}
         {showFilters && (
-          <div className="bg-white rounded-2xl p-6 mb-8 border border-[#e8e0d0]">
+          <div className="bg-brand-cream-light rounded-2xl p-6 mb-8 border border-brand-cream-dark">
             <div className="flex flex-col sm:flex-row gap-6">
               <div>
-                <p className="text-sm font-semibold text-[#0a0a0a] mb-3">Category</p>
+                <p className="text-sm font-semibold text-brand-brown mb-3">Category</p>
                 <div className="flex flex-wrap gap-2">
                   {categories.map((cat) => (
                     <button
@@ -227,8 +226,8 @@ function ProductsContent() {
                       onClick={() => setCategory(cat)}
                       className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
                         category === cat
-                          ? "bg-[#0a0a0a] text-white"
-                          : "bg-[#f4f0e8] text-gray-600 hover:bg-[#e8e0d0]"
+                          ? "bg-brand-brown text-brand-cream-light"
+                          : "bg-brand-cream text-brand-brown-light hover:bg-brand-cream-dark"
                       }`}
                     >
                       {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -237,7 +236,7 @@ function ProductsContent() {
                 </div>
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#0a0a0a] mb-3">Type</p>
+                <p className="text-sm font-semibold text-brand-brown mb-3">Type</p>
                 <div className="flex flex-wrap gap-2">
                   {types.map((t) => (
                     <button
@@ -245,8 +244,8 @@ function ProductsContent() {
                       onClick={() => setType(t)}
                       className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
                         type === t
-                          ? "bg-[#c9a84c] text-[#0a0a0a]"
-                          : "bg-[#f4f0e8] text-gray-600 hover:bg-[#e8e0d0]"
+                          ? "bg-brand-gold text-white"
+                          : "bg-brand-cream text-brand-brown-light hover:bg-brand-cream-dark"
                       }`}
                     >
                       {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -257,7 +256,7 @@ function ProductsContent() {
               {(category !== "all" || type !== "all" || search) && (
                 <button
                   onClick={() => { setCategory("all"); setType("all"); setSearch(""); }}
-                  className="sm:ml-auto text-sm text-[#c9a84c] hover:underline self-start sm:self-center"
+                  className="sm:ml-auto text-sm text-brand-gold hover:underline self-start sm:self-center"
                 >
                   Clear All
                 </button>
@@ -267,26 +266,14 @@ function ProductsContent() {
         )}
 
         {/* Product Grid */}
-        {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden">
-                <div className="skeleton h-56 w-full" />
-                <div className="p-4 space-y-3">
-                  <div className="skeleton h-4 rounded w-3/4" />
-                  <div className="skeleton h-4 rounded w-1/2" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="text-center py-20">
-            <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">No products found</h3>
-            <p className="text-gray-500 mb-6">Try adjusting your filters</p>
+            <ShoppingBag className="w-16 h-16 text-brand-cream-dark mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-brand-brown mb-2">No products found</h3>
+            <p className="text-brand-brown-light/60 mb-6">Try adjusting your filters</p>
             <button
               onClick={() => { setCategory("all"); setType("all"); setSearch(""); }}
-              className="px-6 py-3 bg-[#0a0a0a] text-white rounded-full hover:bg-[#c9a84c] transition-colors"
+              className="px-6 py-3 bg-brand-gold text-white rounded-full hover:bg-brand-gold-hover transition-colors"
             >
               Clear Filters
             </button>
@@ -296,10 +283,10 @@ function ProductsContent() {
             {filtered.map((product) => (
               <div
                 key={product._id}
-                className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300"
+                className="group bg-brand-cream-light rounded-2xl overflow-hidden border border-brand-cream-dark hover:-translate-y-1 hover:shadow-md transition-all duration-300"
               >
                 <Link href={`/products/${product._id}`} className="block">
-                  <div className="relative h-56 bg-[#f4f0e8] overflow-hidden">
+                  <div className="relative h-56 bg-brand-cream overflow-hidden">
                     <Image
                       src={product.images[0]}
                       alt={product.name}
@@ -311,28 +298,28 @@ function ProductsContent() {
                         -{Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}%
                       </span>
                     )}
-                    <span className="absolute top-3 right-3 bg-white/90 text-[#0a0a0a] text-xs font-medium px-2 py-1 rounded-full capitalize">
+                    <span className="absolute top-3 right-3 bg-brand-cream-light/90 text-brand-brown text-xs font-medium px-2 py-1 rounded-full capitalize">
                       {product.category}
                     </span>
                   </div>
                   <div className="p-4">
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1 capitalize">{product.type}</p>
-                    <h3 className="font-semibold text-[#0a0a0a] text-sm mb-2 line-clamp-2">{product.name}</h3>
+                    <p className="text-xs text-brand-brown-light/50 uppercase tracking-wider mb-1 capitalize">{product.type}</p>
+                    <h3 className="font-semibold text-brand-brown text-sm mb-2 line-clamp-2">{product.name}</h3>
                     <div className="flex items-center gap-1 mb-2">
-                      <Star className="w-3 h-3 fill-[#c9a84c] text-[#c9a84c]" />
-                      <span className="text-xs text-gray-600">{product.rating} ({product.reviewCount})</span>
+                      <Star className="w-3 h-3 fill-brand-gold text-brand-gold" />
+                      <span className="text-xs text-brand-brown-light/60">{product.rating} ({product.reviewCount})</span>
                     </div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="font-bold text-[#0a0a0a]">₹{product.price}</span>
+                      <span className="font-bold text-brand-brown">₹{product.price}</span>
                       {product.comparePrice && (
-                        <span className="text-sm text-gray-400 line-through">₹{product.comparePrice}</span>
+                        <span className="text-sm text-brand-cream-dark line-through">₹{product.comparePrice}</span>
                       )}
                     </div>
                     <div className="flex gap-1">
                       {product.colors.slice(0, 4).map((c) => (
                         <div
                           key={c.hex}
-                          className="w-4 h-4 rounded-full border border-gray-200"
+                          className="w-4 h-4 rounded-full border border-brand-cream-dark"
                           style={{ backgroundColor: c.hex }}
                           title={c.name}
                         />
@@ -343,7 +330,7 @@ function ProductsContent() {
                 <div className="px-4 pb-4">
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#0a0a0a] text-white rounded-xl text-sm font-medium hover:bg-[#c9a84c] transition-colors group/btn"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-brand-gold text-white rounded-xl text-sm font-medium hover:bg-brand-gold-hover transition-colors"
                   >
                     <Plus className="w-4 h-4" />
                     Add to Cart
@@ -360,7 +347,7 @@ function ProductsContent() {
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#f4f0e8]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-brand-cream" />}>
       <ProductsContent />
     </Suspense>
   );

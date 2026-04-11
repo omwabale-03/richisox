@@ -16,13 +16,13 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "RichySox — Premium Socks for Men, Women & Kids",
+  title: "RichySox — Premium Luxury Socks",
   description:
-    "Shop premium socks with luxury comfort and bold designs. Free shipping on orders ₹499+. 100+ designs, easy returns.",
+    "Elevate your feet with timeless luxury socks. Curated collection of premium high-quality socks for those who demand sophisticated style without compromising on artisanal comfort.",
   keywords: ["socks", "premium socks", "luxury socks", "men socks", "women socks", "kids socks", "India"],
   openGraph: {
-    title: "RichySox — Step into Luxury Comfort",
-    description: "Premium socks for every occasion. Shop now.",
+    title: "RichySox — Elevate Your Feet With Timeless Luxury",
+    description: "Premium socks crafted for sophisticated style and artisanal comfort.",
     siteName: "RichySox",
     type: "website",
   },
@@ -38,10 +38,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           toastOptions={{
             duration: 3000,
             style: {
-              background: "#0a0a0a",
-              color: "#fafaf7",
+              background: "#3b1a10",
+              color: "#faf6ee",
               fontFamily: "var(--font-dm-sans)",
               borderRadius: "12px",
+              border: "1px solid #c9a84c",
             },
           }}
         />

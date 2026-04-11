@@ -75,21 +75,21 @@ export default function ProductDetailPage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-[#f4f0e8]">
+    <div className="min-h-screen bg-brand-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-          <Link href="/" className="hover:text-[#c9a84c]">Home</Link>
+        <nav className="flex items-center gap-2 text-sm text-brand-brown-light/60 mb-8">
+          <Link href="/" className="hover:text-brand-gold">Home</Link>
           <ChevronRight className="w-4 h-4" />
-          <Link href="/products" className="hover:text-[#c9a84c]">Products</Link>
+          <Link href="/products" className="hover:text-brand-gold">Products</Link>
           <ChevronRight className="w-4 h-4" />
-          <span className="text-[#0a0a0a] font-medium">{product.name}</span>
+          <span className="text-brand-brown font-medium">{product.name}</span>
         </nav>
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Images */}
           <div>
-            <div className="relative h-96 lg:h-[500px] bg-white rounded-3xl overflow-hidden mb-4 shadow-sm">
+            <div className="relative h-96 lg:h-[500px] bg-brand-cream-light rounded-3xl overflow-hidden mb-4 border border-brand-cream-dark">
               <Image
                 src={product.images[activeImage]}
                 alt={product.name}
@@ -103,7 +103,7 @@ export default function ProductDetailPage() {
                   key={i}
                   onClick={() => setActiveImage(i)}
                   className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                    activeImage === i ? "border-[#c9a84c]" : "border-transparent"
+                    activeImage === i ? "border-brand-gold" : "border-transparent"
                   }`}
                 >
                   <Image src={img} alt="" fill className="object-cover" />
@@ -114,25 +114,25 @@ export default function ProductDetailPage() {
 
           {/* Info */}
           <div>
-            <span className="inline-block px-3 py-1 bg-[#c9a84c]/10 text-[#c9a84c] text-sm rounded-full capitalize mb-3">
-              {product.category} · {product.type}
+            <span className="inline-block px-3 py-1 bg-brand-gold/10 text-brand-gold text-sm rounded-full capitalize mb-3">
+              {product.category} &middot; {product.type}
             </span>
-            <h1 className="text-3xl font-playfair font-bold text-[#0a0a0a] mb-3">{product.name}</h1>
+            <h1 className="text-3xl font-playfair font-bold text-brand-brown mb-3">{product.name}</h1>
 
             <div className="flex items-center gap-3 mb-4">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? "fill-[#c9a84c] text-[#c9a84c]" : "text-gray-300"}`} />
+                  <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? "fill-brand-gold text-brand-gold" : "text-brand-cream-dark"}`} />
                 ))}
               </div>
-              <span className="text-sm text-gray-600">{product.rating} ({product.reviewCount} reviews)</span>
+              <span className="text-sm text-brand-brown-light/60">{product.rating} ({product.reviewCount} reviews)</span>
             </div>
 
             <div className="flex items-center gap-3 mb-6">
-              <span className="text-4xl font-bold text-[#0a0a0a]">₹{product.price}</span>
+              <span className="text-4xl font-bold text-brand-brown">₹{product.price}</span>
               {product.comparePrice && (
                 <>
-                  <span className="text-xl text-gray-400 line-through">₹{product.comparePrice}</span>
+                  <span className="text-xl text-brand-cream-dark line-through">₹{product.comparePrice}</span>
                   <span className="bg-red-100 text-red-600 text-sm font-semibold px-2 py-0.5 rounded-full">
                     {discount}% OFF
                   </span>
@@ -140,12 +140,12 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
+            <p className="text-brand-brown-light leading-relaxed mb-6">{product.description}</p>
 
             {/* Color Picker */}
             <div className="mb-6">
-              <p className="text-sm font-semibold text-[#0a0a0a] mb-3">
-                Color: <span className="font-normal text-gray-600">{selectedColor.name}</span>
+              <p className="text-sm font-semibold text-brand-brown mb-3">
+                Color: <span className="font-normal text-brand-brown-light/60">{selectedColor.name}</span>
               </p>
               <div className="flex gap-3">
                 {product.colors.map((color) => (
@@ -153,7 +153,7 @@ export default function ProductDetailPage() {
                     key={color.hex}
                     onClick={() => setSelectedColor(color)}
                     className={`w-9 h-9 rounded-full border-2 transition-all ${
-                      selectedColor.hex === color.hex ? "border-[#c9a84c] scale-110" : "border-transparent scale-100"
+                      selectedColor.hex === color.hex ? "border-brand-gold scale-110" : "border-transparent scale-100"
                     }`}
                     style={{ backgroundColor: color.hex }}
                     title={color.name}
@@ -164,16 +164,16 @@ export default function ProductDetailPage() {
 
             {/* Size Picker */}
             <div className="mb-6">
-              <p className="text-sm font-semibold text-[#0a0a0a] mb-3">Size</p>
+              <p className="text-sm font-semibold text-brand-brown mb-3">Size</p>
               <div className="flex gap-2">
                 {product.sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`px-5 py-2 rounded-full text-sm font-medium border-2 transition-all ${
+                    className={`px-5 py-2 rounded-full text-sm font-medium border-[1.5px] transition-all ${
                       selectedSize === size
-                        ? "bg-[#0a0a0a] text-white border-[#0a0a0a]"
-                        : "border-[#e8e0d0] text-[#0a0a0a] hover:border-[#0a0a0a]"
+                        ? "bg-brand-brown text-brand-cream-light border-brand-brown"
+                        : "border-brand-cream-dark text-brand-brown hover:border-brand-brown"
                     }`}
                   >
                     {size}
@@ -184,13 +184,13 @@ export default function ProductDetailPage() {
 
             {/* Quantity */}
             <div className="flex items-center gap-4 mb-6">
-              <p className="text-sm font-semibold text-[#0a0a0a]">Quantity</p>
-              <div className="flex items-center gap-3 bg-white rounded-full border border-[#e8e0d0] px-4 py-2">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="hover:text-[#c9a84c]">
+              <p className="text-sm font-semibold text-brand-brown">Quantity</p>
+              <div className="flex items-center gap-3 bg-brand-cream-light rounded-full border border-brand-cream-dark px-4 py-2">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="hover:text-brand-gold">
                   <Minus className="w-4 h-4" />
                 </button>
                 <span className="w-6 text-center font-medium">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="hover:text-[#c9a84c]">
+                <button onClick={() => setQuantity(quantity + 1)} className="hover:text-brand-gold">
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
@@ -200,14 +200,14 @@ export default function ProductDetailPage() {
             <div className="flex gap-4 mb-8">
               <button
                 onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl border-2 border-[#0a0a0a] text-[#0a0a0a] font-semibold hover:bg-[#0a0a0a] hover:text-white transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full border-[1.5px] border-brand-gold text-brand-brown font-semibold hover:bg-brand-gold/10 transition-all"
               >
                 <ShoppingBag className="w-5 h-5" />
                 Add to Cart
               </button>
               <button
                 onClick={handleBuyNow}
-                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl bg-[#c9a84c] text-[#0a0a0a] font-semibold hover:bg-[#b8952e] transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full bg-brand-gold text-white font-semibold hover:bg-brand-gold-hover transition-all"
               >
                 <Zap className="w-5 h-5" />
                 Buy Now
@@ -217,8 +217,8 @@ export default function ProductDetailPage() {
             {/* Perks */}
             <div className="grid grid-cols-2 gap-3">
               {perks.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-2 text-sm text-gray-600">
-                  <Icon className="w-4 h-4 text-[#c9a84c]" />
+                <div key={label} className="flex items-center gap-2 text-sm text-brand-brown-light">
+                  <Icon className="w-4 h-4 text-brand-gold" />
                   {label}
                 </div>
               ))}

@@ -9,14 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        playfair: ["var(--font-playfair)", "serif"],
+        playfair: ["var(--font-playfair)", "Georgia", "Times New Roman", "serif"],
         sans: ["var(--font-dm-sans)", "sans-serif"],
       },
       colors: {
-        black: "#0a0a0a",
-        gold: "#c9a84c",
-        cream: "#f4f0e8",
-        offwhite: "#fafaf7",
+        brand: {
+          brown: "#3b1a10",
+          "brown-light": "#5c3323",
+          gold: "#c9a84c",
+          "gold-hover": "#a8882e",
+          cream: "#f5f0e8",
+          "cream-light": "#faf6ee",
+          "cream-dark": "#e8e0d0",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

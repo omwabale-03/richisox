@@ -30,14 +30,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="flex h-screen bg-[#f4f0e8]">
+    <div className="flex h-screen bg-brand-cream">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#0a0a0a] text-white flex flex-col fixed h-full">
+      <aside className="w-64 bg-brand-brown text-white flex flex-col fixed h-full">
         {/* Logo */}
         <div className="p-6 border-b border-white/10">
           <Link href="/" className="text-2xl font-playfair font-bold">
             <span className="text-white">Richy</span>
-            <span className="text-[#c9a84c]">Sox</span>
+            <span className="text-brand-gold">Sox</span>
           </Link>
           <p className="text-xs text-gray-500 mt-1">Admin Panel</p>
         </div>
@@ -50,7 +50,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               href={href}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                 pathname === href
-                  ? "bg-[#c9a84c] text-[#0a0a0a]"
+                  ? "bg-brand-gold text-brand-brown"
                   : "text-gray-400 hover:bg-white/10 hover:text-white"
               }`}
             >

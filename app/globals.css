@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: 40 33% 96%;
-    --foreground: 0 0% 4%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 4%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 4%;
-    --primary: 0 0% 4%;
-    --primary-foreground: 40 33% 96%;
-    --secondary: 40 46% 55%;
-    --secondary-foreground: 0 0% 4%;
-    --muted: 40 33% 92%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 40 46% 55%;
-    --accent-foreground: 0 0% 4%;
+    --background: 38 30% 94%;
+    --foreground: 16 53% 16%;
+    --card: 40 40% 97%;
+    --card-foreground: 16 53% 16%;
+    --popover: 40 40% 97%;
+    --popover-foreground: 16 53% 16%;
+    --primary: 42 50% 54%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 38 30% 90%;
+    --secondary-foreground: 16 53% 16%;
+    --muted: 38 24% 90%;
+    --muted-foreground: 16 20% 40%;
+    --accent: 42 50% 54%;
+    --accent-foreground: 16 53% 16%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 40 20% 85%;
-    --input: 40 20% 85%;
-    --ring: 40 46% 55%;
+    --border: 38 30% 82%;
+    --input: 38 30% 82%;
+    --ring: 42 50% 54%;
     --radius: 0.75rem;
   }
 
@@ -31,7 +31,7 @@
   }
 
   body {
-    @apply bg-[#f4f0e8] text-[#0a0a0a] font-sans;
+    @apply bg-[#f5f0e8] text-[#3b1a10] font-sans;
   }
 
   h1, h2, h3 {
@@ -45,7 +45,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f4f0e8;
+  background: #f5f0e8;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -70,9 +70,9 @@
 .skeleton {
   background: linear-gradient(
     90deg,
-    #f0e8d8 25%,
-    #e8dcc8 50%,
-    #f0e8d8 75%
+    #ebe5d8 25%,
+    #e0d8c8 50%,
+    #ebe5d8 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;

@@ -100,12 +100,12 @@ export default function AdminProductsPage() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-playfair font-bold text-[#0a0a0a]">Products</h1>
+          <h1 className="text-3xl font-playfair font-bold text-brand-brown">Products</h1>
           <p className="text-gray-500 mt-1">{products.filter((p) => p.isActive).length} active products</p>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#0a0a0a] text-white rounded-xl hover:bg-[#c9a84c] transition-colors font-medium"
+          className="flex items-center gap-2 px-5 py-2.5 bg-brand-brown text-white rounded-xl hover:bg-brand-gold-hover transition-colors font-medium"
         >
           <Plus className="w-4 h-4" />
           Add Product
@@ -120,7 +120,7 @@ export default function AdminProductsPage() {
           placeholder="Search by name or SKU..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md pl-10 pr-4 py-2.5 rounded-xl border border-[#e8e0d0] bg-white focus:outline-none focus:ring-2 focus:ring-[#c9a84c] text-sm"
+          className="w-full max-w-md pl-10 pr-4 py-2.5 rounded-xl border border-brand-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm"
         />
       </div>
 
@@ -128,7 +128,7 @@ export default function AdminProductsPage() {
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#f4f0e8]">
+            <thead className="bg-brand-cream">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Product</th>
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
@@ -138,16 +138,16 @@ export default function AdminProductsPage() {
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#f4f0e8]">
+            <tbody className="divide-y divide-brand-cream">
               {filtered.map((p) => (
-                <tr key={p._id} className="hover:bg-[#f4f0e8]/30 transition-colors">
+                <tr key={p._id} className="hover:bg-brand-cream/30 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-[#f4f0e8] flex-shrink-0">
+                      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-cream flex-shrink-0">
                         <Image src={p.images[0]} alt={p.name} fill className="object-cover" />
                       </div>
                       <div>
-                        <p className="font-medium text-[#0a0a0a] text-sm">{p.name}</p>
+                        <p className="font-medium text-brand-brown text-sm">{p.name}</p>
                         <p className="text-xs text-gray-400 font-mono">{p.sku}</p>
                       </div>
                     </div>
@@ -198,9 +198,9 @@ export default function AdminProductsPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b border-[#f4f0e8]">
+            <div className="flex items-center justify-between p-6 border-b border-brand-cream">
               <h3 className="text-xl font-playfair font-bold">{editProduct ? "Edit Product" : "Add Product"}</h3>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-[#f4f0e8] rounded-xl">
+              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-brand-cream rounded-xl">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -224,14 +224,14 @@ export default function AdminProductsPage() {
                       rows={3}
                       value={form[key as keyof typeof form] as string}
                       onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
-                      className="w-full px-4 py-2 border border-[#e8e0d0] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#c9a84c] resize-none"
+                      className="w-full px-4 py-2 border border-brand-cream-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold resize-none"
                     />
                   ) : (
                     <input
                       type={type || "text"}
                       value={form[key as keyof typeof form] as string}
                       onChange={(e) => setForm((f) => ({ ...f, [key]: type === "number" ? Number(e.target.value) : e.target.value }))}
-                      className="w-full px-4 py-2 border border-[#e8e0d0] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#c9a84c]"
+                      className="w-full px-4 py-2 border border-brand-cream-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold"
                     />
                   )}
                 </div>
@@ -241,7 +241,7 @@ export default function AdminProductsPage() {
                 <select
                   value={form.category}
                   onChange={(e) => setForm((f) => ({ ...f, category: e.target.value as typeof f.category }))}
-                  className="w-full px-4 py-2 border border-[#e8e0d0] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#c9a84c]"
+                  className="w-full px-4 py-2 border border-brand-cream-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold"
                 >
                   {["men", "women", "kids"].map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -251,25 +251,25 @@ export default function AdminProductsPage() {
                 <select
                   value={form.type}
                   onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as typeof f.type }))}
-                  className="w-full px-4 py-2 border border-[#e8e0d0] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#c9a84c]"
+                  className="w-full px-4 py-2 border border-brand-cream-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold"
                 >
                   {["casual", "sports", "formal", "ankle", "crew"].map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
               </div>
               <div className="flex items-center gap-3">
-                <input type="checkbox" id="isActive" checked={form.isActive} onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked }))} className="w-4 h-4 accent-[#c9a84c]" />
+                <input type="checkbox" id="isActive" checked={form.isActive} onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked }))} className="w-4 h-4 accent-brand-gold" />
                 <label htmlFor="isActive" className="text-sm font-medium text-gray-700">Active</label>
               </div>
               <div className="flex items-center gap-3">
-                <input type="checkbox" id="isFeatured" checked={form.isFeatured} onChange={(e) => setForm((f) => ({ ...f, isFeatured: e.target.checked }))} className="w-4 h-4 accent-[#c9a84c]" />
+                <input type="checkbox" id="isFeatured" checked={form.isFeatured} onChange={(e) => setForm((f) => ({ ...f, isFeatured: e.target.checked }))} className="w-4 h-4 accent-brand-gold" />
                 <label htmlFor="isFeatured" className="text-sm font-medium text-gray-700">Featured</label>
               </div>
             </div>
-            <div className="flex gap-3 p-6 border-t border-[#f4f0e8]">
-              <button onClick={() => setShowModal(false)} className="flex-1 py-3 border border-[#e8e0d0] rounded-xl text-sm font-medium hover:bg-[#f4f0e8] transition-colors">
+            <div className="flex gap-3 p-6 border-t border-brand-cream">
+              <button onClick={() => setShowModal(false)} className="flex-1 py-3 border border-brand-cream-dark rounded-xl text-sm font-medium hover:bg-brand-cream transition-colors">
                 Cancel
               </button>
-              <button onClick={handleSave} className="flex-1 py-3 bg-[#0a0a0a] text-white rounded-xl text-sm font-medium hover:bg-[#c9a84c] transition-colors flex items-center justify-center gap-2">
+              <button onClick={handleSave} className="flex-1 py-3 bg-brand-brown text-white rounded-xl text-sm font-medium hover:bg-brand-gold-hover transition-colors flex items-center justify-center gap-2">
                 <Check className="w-4 h-4" />
                 {editProduct ? "Update Product" : "Create Product"}
               </button>

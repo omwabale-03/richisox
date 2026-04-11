@@ -52,15 +52,15 @@ export default function OrderDetailPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f4f0e8]">
+    <div className="min-h-screen bg-brand-cream">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Link href="/orders" className="flex items-center gap-1 text-sm text-gray-500 hover:text-[#c9a84c] transition-colors">
+          <Link href="/orders" className="flex items-center gap-1 text-sm text-brand-brown-light/60 hover:text-brand-gold transition-colors">
             <ChevronLeft className="w-4 h-4" /> Orders
           </Link>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-playfair font-bold text-[#0a0a0a] font-mono">
+            <h1 className="text-2xl font-playfair font-bold text-brand-brown font-mono">
               {order.orderId}
             </h1>
             <span className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${statusColors[order.orderStatus]}`}>
@@ -73,32 +73,32 @@ export default function OrderDetailPage() {
           {/* Left Column */}
           <div className="md:col-span-2 space-y-6">
             {/* Tracking */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-[#0a0a0a] mb-4">Order Tracking</h2>
+            <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
+              <h2 className="text-lg font-semibold text-brand-brown mb-4">Order Tracking</h2>
               {order.trackingNumber && (
-                <div className="bg-[#f4f0e8] rounded-xl p-3 mb-4 text-sm">
-                  <span className="text-gray-600">Tracking: </span>
-                  <span className="font-mono font-semibold text-[#c9a84c]">{order.trackingNumber}</span>
-                  {order.courier && <span className="text-gray-500 ml-2">via {order.courier}</span>}
+                <div className="bg-brand-cream rounded-xl p-3 mb-4 text-sm">
+                  <span className="text-brand-brown-light/60">Tracking: </span>
+                  <span className="font-mono font-semibold text-brand-gold">{order.trackingNumber}</span>
+                  {order.courier && <span className="text-brand-brown-light/50 ml-2">via {order.courier}</span>}
                 </div>
               )}
               <OrderTracking steps={trackingSteps} />
             </div>
 
             {/* Items */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-[#0a0a0a] mb-4">Items</h2>
+            <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
+              <h2 className="text-lg font-semibold text-brand-brown mb-4">Items</h2>
               <div className="space-y-4">
                 {order.items.map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
-                    <div className="relative w-16 h-16 bg-[#f4f0e8] rounded-xl overflow-hidden flex-shrink-0">
+                    <div className="relative w-16 h-16 bg-brand-cream rounded-xl overflow-hidden flex-shrink-0">
                       <Image src={item.image} alt={item.name} fill className="object-cover" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-[#0a0a0a]">{item.name}</p>
-                      <p className="text-sm text-gray-500">{item.size} · {item.color} · Qty: {item.quantity}</p>
+                      <p className="font-medium text-brand-brown">{item.name}</p>
+                      <p className="text-sm text-brand-brown-light/60">{item.size} &middot; {item.color} &middot; Qty: {item.quantity}</p>
                     </div>
-                    <span className="font-semibold">₹{(item.price * item.quantity).toFixed(0)}</span>
+                    <span className="font-semibold text-brand-brown">₹{(item.price * item.quantity).toFixed(0)}</span>
                   </div>
                 ))}
               </div>
@@ -108,10 +108,10 @@ export default function OrderDetailPage() {
           {/* Right Column */}
           <div className="space-y-6">
             {/* Delivery Address */}
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <h2 className="font-semibold text-[#0a0a0a] mb-3">Delivery Address</h2>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p className="font-medium text-[#0a0a0a]">{order.address.name}</p>
+            <div className="bg-brand-cream-light rounded-2xl p-5 border border-brand-cream-dark">
+              <h2 className="font-semibold text-brand-brown mb-3">Delivery Address</h2>
+              <div className="text-sm text-brand-brown-light/60 space-y-1">
+                <p className="font-medium text-brand-brown">{order.address.name}</p>
                 <p>{order.address.mobile}</p>
                 <p>{order.address.street}</p>
                 <p>{order.address.city}, {order.address.state} {order.address.pincode}</p>
@@ -120,30 +120,30 @@ export default function OrderDetailPage() {
             </div>
 
             {/* Payment */}
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <h2 className="font-semibold text-[#0a0a0a] mb-3">Payment Summary</h2>
+            <div className="bg-brand-cream-light rounded-2xl p-5 border border-brand-cream-dark">
+              <h2 className="font-semibold text-brand-brown mb-3">Payment Summary</h2>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-brand-brown-light/60">
                   <span>Subtotal</span>
                   <span>₹{order.subtotal}</span>
                 </div>
                 {order.discount > 0 && (
-                  <div className="flex justify-between text-green-600">
+                  <div className="flex justify-between text-green-700">
                     <span>Discount ({order.coupon})</span>
                     <span>-₹{order.discount}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-brand-brown-light/60">
                   <span>Shipping</span>
                   <span>{order.shipping === 0 ? "FREE" : `₹${order.shipping}`}</span>
                 </div>
-                <div className="flex justify-between font-bold text-[#0a0a0a] border-t border-[#e8e0d0] pt-2">
+                <div className="flex justify-between font-bold text-brand-brown border-t border-brand-cream-dark pt-2">
                   <span>Total</span>
                   <span>₹{order.total}</span>
                 </div>
                 <div className="flex justify-between text-xs mt-2">
-                  <span className="text-gray-500">Payment Status</span>
-                  <span className={`font-semibold capitalize ${order.paymentStatus === "paid" ? "text-green-600" : "text-red-600"}`}>
+                  <span className="text-brand-brown-light/50">Payment Status</span>
+                  <span className={`font-semibold capitalize ${order.paymentStatus === "paid" ? "text-green-700" : "text-red-600"}`}>
                     {order.paymentStatus}
                   </span>
                 </div>
