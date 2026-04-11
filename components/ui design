@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>RichySox</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: Georgia, 'Times New Roman', serif;
+                background: #f5f0e8;
+                color: #3b1a10;
+            }
+
+            /* NAV */
+            nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 18px 48px;
+                background: #faf6ee;
+                border-bottom: 1.5px solid #c9a84c;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            .logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 700;
+                font-size: 20px;
+                text-decoration: none;
+                color: #3b1a10;
+            }
+
+            .logo-crown {
+                font-size: 22px;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 40px;
+                list-style: none;
+            }
+
+            .nav-links a {
+                text-decoration: none;
+                color: #3b1a10;
+                font-family: sans-serif;
+                font-size: 15px;
+                border-bottom: 2px solid transparent;
+            }
+
+            .nav-links a.active {
+                border-bottom-color: #3b1a10;
+            }
+
+            .nav-right {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .cart-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 22px;
+                position: relative;
+            }
+
+            .cart-badge {
+                position: absolute;
+                top: -4px;
+                right: -6px;
+                background: #3b1a10;
+                color: #fff;
+                font-size: 10px;
+                font-family: sans-serif;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* HERO */
+            .hero {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 80px 80px 80px 80px;
+                background: #faf6ee;
+                min-height: 520px;
+            }
+
+            .hero-text {
+                max-width: 520px;
+            }
+
+            .hero-text h1 {
+                font-size: 58px;
+                font-weight: 800;
+                line-height: 1.1;
+                color: #3b1a10;
+                margin-bottom: 28px;
+            }
+
+            .hero-text p {
+                font-family: sans-serif;
+                font-size: 16px;
+                line-height: 1.7;
+                color: #5c3323;
+                margin-bottom: 36px;
+                max-width: 420px;
+            }
+
+            .btn-primary {
+                background: #c9a84c;
+                color: #fff;
+                border: none;
+                padding: 16px 36px;
+                font-size: 16px;
+                font-family: sans-serif;
+                border-radius: 40px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: background 0.2s;
+            }
+
+            .btn-primary:hover {
+                background: #a8882e;
+            }
+
+            .hero-img {
+                width: 380px;
+                height: 420px;
+                border-radius: 24px;
+                object-fit: cover;
+                background: #ddd;
+                flex-shrink: 0;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .hero-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 24px;
+            }
+
+            /* SHOP BY CATEGORY */
+            .section {
+                padding: 80px 80px;
+                background: #f5f0e8;
+            }
+
+            .section-title {
+                font-size: 44px;
+                font-weight: 800;
+                text-align: center;
+                color: #3b1a10;
+                margin-bottom: 50px;
+            }
+
+            .category-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 32px;
+            }
+
+            .category-card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .category-card-img {
+                width: 100%;
+                aspect-ratio: 3/4;
+                border-radius: 12px;
+                overflow: hidden;
+                background: #ddd;
+                margin-bottom: 20px;
+            }
+
+            .category-card-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .category-card h3 {
+                font-size: 20px;
+                font-weight: 700;
+                color: #3b1a10;
+                margin-bottom: 14px;
+                text-align: center;
+            }
+
+            .btn-outline {
+                background: transparent;
+                border: 1.5px solid #c9a84c;
+                color: #3b1a10;
+                padding: 10px 36px;
+                border-radius: 40px;
+                font-size: 14px;
+                font-family: sans-serif;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+            .btn-outline:hover {
+                background: #c9a84c22;
+            }
+
+            /* CURATED SELECTION */
+            .curated {
+                background: #faf6ee;
+                padding: 80px 80px;
+            }
+
+            .curated-sub {
+                text-align: center;
+                font-family: sans-serif;
+                font-size: 16px;
+                color: #5c3323;
+                max-width: 600px;
+                margin: 0 auto 50px;
+                line-height: 1.7;
+            }
+
+            .carousel-wrap {
+                position: relative;
+                display: flex;
+                align-items: center;
+                gap: 24px;
+            }
+
+            .carousel-btn {
+                background: none;
+                border: 1.5px solid #c9a84c55;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                flex-shrink: 0;
+                font-size: 18px;
+                cursor: pointer;
+                color: #3b1a10;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .carousel-btn:hover {
+                border-color: #c9a84c;
+                background: #c9a84c22;
+            }
+
+            .carousel-inner {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                flex: 1;
+            }
+
+            .carousel-card {
+                border-radius: 20px;
+                overflow: hidden;
+                background: #e8e4dc;
+                aspect-ratio: 4/3;
+            }
+
+            .carousel-card img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            /* placeholders for missing images */
+            .img-placeholder {
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #d8d0c4, #bfb7aa);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #7a6e66;
+                font-family: sans-serif;
+                font-size: 13px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- NAV -->
+        <nav>
+            <a class="logo" href="#">
+                <span class="logo-crown">👑</span> RichySox
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">Portfolio Page</a></li>
+            </ul>
+            <div class="nav-right">
+                <span style="font-size:22px; cursor:pointer;">🌐</span>
+                <button class="cart-btn" style="position:relative;">
+                    🛍
+                    <span class="cart-badge">0</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-text">
+                <h1>Elevate Your Feet With Timeless Luxury Socks</h1>
+                <p>We curated a collection of premium high-quality socks for those who demand sophisticated style
+                    without compromising on artisanal comfort. From silk blends to fine wool, experience the pinnacle of
+                    foot couture.</p>
+                <button class="btn-primary">Shop Luxury</button>
+            </div>
+            <div class="hero-img">
+                <div class="img-placeholder">Luxury Burgundy Socks</div>
+            </div>
+        </section>
+
+        <!-- SHOP BY CATEGORY -->
+        <section class="section">
+            <h2 class="section-title">Shop by Category</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-card-img">
+                        <div class="img-placeholder">Navy Luxury Socks</div>
+                    </div>
+                    <h3>Luxury Selection</h3>
+                    <button class="btn-outline">Explore</button>
+                </div>
+                <div class="category-card">
+                    <div class="category-card-img">
+                        <div class="img-placeholder">Teal & Amber Pattern Socks</div>
+                    </div>
+                    <h3>Stylish Patterns</h3>
+                    <button class="btn-outline">Explore</button>
+                </div>
+                <div class="category-card">
+                    <div class="category-card-img">
+                        <div class="img-placeholder">White Comfort Socks</div>
+                    </div>
+                    <h3>Superior Comfort</h3>
+                    <button class="btn-outline">Explore</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CURATED SELECTION -->
+        <section class="curated">
+            <h2 class="section-title">The Curated Selection</h2>
+            <p class="curated-sub">Discover our ensemble of sophisticated designs, where luxury comfort is woven into
+                every stitch. We invite you to experience the pinnacle of artisanal sock-making.</p>
+            <div class="carousel-wrap">
+                <button class="carousel-btn">&#8249;</button>
+                <div class="carousel-inner">
+                    <div class="carousel-card">
+                        <div class="img-placeholder">Blue Athletic Socks</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="img-placeholder">Olive Green Socks</div>
+                    </div>
+                </div>
+                <button class="carousel-btn">&#8250;</button>
+            </div>
+        </section>
+
+    </body>
+
+</html>
