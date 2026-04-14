@@ -7,7 +7,6 @@ import {
   ShoppingBag,
   User,
   Menu,
-  X,
   LogOut,
   Package,
   Settings,
@@ -18,6 +17,7 @@ import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
 import { useWishlistStore } from "@/store/wishlistStore";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
+import MobileNav from "@/components/layout/MobileNav";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -89,13 +89,13 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Mobile hamburger (left on mobile) */}
+            {/* Mobile hamburger (left on mobile) — opens MobileNav drawer */}
             <div className="md:hidden flex items-center">
               <button
                 className="p-2 text-luxe-text hover:text-luxe-text-secondary transition-colors duration-200"
-                onClick={() => setMenuOpen(!menuOpen)}
+                onClick={() => setMenuOpen(true)}
               >
-                {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                <Menu className="w-5 h-5" />
               </button>
             </div>
 
@@ -226,25 +226,10 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {menuOpen && (
-          <div className="md:hidden bg-white border-t border-luxe-border">
-            <div className="px-[4%] py-5 space-y-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="block py-3 px-4 text-nav-link uppercase text-luxe-text-secondary hover:text-luxe-text hover:bg-luxe-surface transition-colors duration-200"
-                  style={{ fontWeight: 500 }}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </nav>
+
+      {/* Mobile Navigation Drawer */}
+      <MobileNav isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
 
       {/* Search Overlay */}
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />

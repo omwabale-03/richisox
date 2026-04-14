@@ -125,3 +125,9 @@ button, input, select, textarea, div, a, img, span {
 .rounded-full {
   border-radius: 9999px !important;
 }
+
+/* Re-enable border-radius for mobile nav subcategory cards */
+.mobile-nav-card,
+.mobile-nav-card img {
+  border-radius: 8px !important;
+}
