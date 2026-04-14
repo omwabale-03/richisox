@@ -126,6 +126,11 @@ button, input, select, textarea, div, a, img, span {
   border-radius: 9999px !important;
 }
 
+/* Mega menu link hover */
+.mega-menu-link:hover {
+  color: #C9A84C !important;
+}
+
 /* Re-enable border-radius for mobile nav subcategory cards */
 .mobile-nav-card,
 .mobile-nav-card img {
