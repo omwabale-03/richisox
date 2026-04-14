@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Star, ShoppingBag, Zap, Truck, RotateCcw, Shield, ChevronRight, Minus, Plus } from "lucide-react";
+import { ShoppingBag, Zap, Truck, RotateCcw, Shield, ChevronRight, Minus, Plus } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import toast from "react-hot-toast";
 import { IProduct } from "@/types";
@@ -23,7 +23,7 @@ const DEMO_PRODUCT: IProduct = {
     { name: "Midnight Black", hex: "#000000" },
     { name: "Navy Blue", hex: "#1a237e" },
     { name: "Charcoal", hex: "#424242" },
-    { name: "Gold", hex: "#c9a84c" },
+    { name: "Gold", hex: "#A8874A" },
   ],
   images: [
     "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=600&h=600&fit=crop",
@@ -75,21 +75,21 @@ export default function ProductDetailPage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-brand-cream">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-luxe-bg">
+      <div className="max-w-[1400px] mx-auto px-[4%] py-10">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-brand-brown-light/60 mb-8">
-          <Link href="/" className="hover:text-brand-gold">Home</Link>
-          <ChevronRight className="w-4 h-4" />
-          <Link href="/products" className="hover:text-brand-gold">Products</Link>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-brand-brown font-medium">{product.name}</span>
+        <nav className="flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-luxe-muted mb-8" style={{ fontWeight: 500 }}>
+          <Link href="/" className="hover:text-luxe-text transition-colors duration-200">Home</Link>
+          <ChevronRight className="w-3 h-3" />
+          <Link href="/products" className="hover:text-luxe-text transition-colors duration-200">Products</Link>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-luxe-text">{product.name}</span>
         </nav>
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Images */}
           <div>
-            <div className="relative h-96 lg:h-[500px] bg-brand-cream-light rounded-3xl overflow-hidden mb-4 border border-brand-cream-dark">
+            <div className="relative h-96 lg:h-[500px] bg-luxe-image-bg overflow-hidden mb-4 border border-luxe-border">
               <Image
                 src={product.images[activeImage]}
                 alt={product.name}
@@ -102,8 +102,8 @@ export default function ProductDetailPage() {
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
-                  className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                    activeImage === i ? "border-brand-gold" : "border-transparent"
+                  className={`relative w-20 h-20 overflow-hidden border-2 transition-all duration-200 ${
+                    activeImage === i ? "border-luxe-text" : "border-luxe-border"
                   }`}
                 >
                   <Image src={img} alt="" fill className="object-cover" />
@@ -114,48 +114,64 @@ export default function ProductDetailPage() {
 
           {/* Info */}
           <div>
-            <span className="inline-block px-3 py-1 bg-brand-gold/10 text-brand-gold text-sm rounded-full capitalize mb-3">
+            <p className="text-[9px] uppercase tracking-[0.25em] text-luxe-gold mb-3" style={{ fontWeight: 500 }}>
               {product.category} &middot; {product.type}
-            </span>
-            <h1 className="text-3xl font-playfair font-bold text-brand-brown mb-3">{product.name}</h1>
+            </p>
+            <h1 className="font-playfair text-luxe-text mb-3" style={{ fontWeight: 400, fontSize: "clamp(28px, 3vw, 38px)" }}>
+              {product.name}
+            </h1>
 
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-2 mb-4">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? "fill-brand-gold text-brand-gold" : "text-brand-cream-dark"}`} />
+                  <div
+                    key={i}
+                    className="w-[12px] h-[12px]"
+                    style={{
+                      clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+                      background: i < Math.floor(product.rating) ? "#A8874A" : "#E8E4DF",
+                    }}
+                  />
                 ))}
               </div>
-              <span className="text-sm text-brand-brown-light/60">{product.rating} ({product.reviewCount} reviews)</span>
+              <span className="text-[12px] text-luxe-muted">{product.rating} ({product.reviewCount} reviews)</span>
             </div>
 
             <div className="flex items-center gap-3 mb-6">
-              <span className="text-4xl font-bold text-brand-brown">₹{product.price}</span>
+              <span className="text-[28px] text-luxe-text" style={{ fontWeight: 500 }}>
+                &#8377;{product.price}
+              </span>
               {product.comparePrice && (
                 <>
-                  <span className="text-xl text-brand-cream-dark line-through">₹{product.comparePrice}</span>
-                  <span className="bg-red-100 text-red-600 text-sm font-semibold px-2 py-0.5 rounded-full">
-                    {discount}% OFF
+                  <span className="text-[18px] text-luxe-muted line-through">&#8377;{product.comparePrice}</span>
+                  <span className="text-[13px] text-luxe-sale" style={{ fontWeight: 500 }}>
+                    {discount}% off
                   </span>
                 </>
               )}
             </div>
 
-            <p className="text-brand-brown-light leading-relaxed mb-6">{product.description}</p>
+            <p className="text-body-base text-luxe-text-secondary mb-6" style={{ fontWeight: 300, lineHeight: 1.85 }}>
+              {product.description}
+            </p>
 
             {/* Color Picker */}
             <div className="mb-6">
-              <p className="text-sm font-semibold text-brand-brown mb-3">
-                Color: <span className="font-normal text-brand-brown-light/60">{selectedColor.name}</span>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-3" style={{ fontWeight: 600 }}>
+                Color: <span className="text-luxe-muted" style={{ fontWeight: 400 }}>{selectedColor.name}</span>
               </p>
               <div className="flex gap-3">
                 {product.colors.map((color) => (
                   <button
                     key={color.hex}
                     onClick={() => setSelectedColor(color)}
-                    className={`w-9 h-9 rounded-full border-2 transition-all ${
-                      selectedColor.hex === color.hex ? "border-brand-gold scale-110" : "border-transparent scale-100"
-                    }`}
-                    style={{ backgroundColor: color.hex }}
+                    className="w-[14px] h-[14px] rounded-full border border-luxe-border transition-all duration-200"
+                    style={{
+                      backgroundColor: color.hex,
+                      boxShadow: selectedColor.hex === color.hex
+                        ? "0 0 0 2px white, 0 0 0 3px #1A1A1A"
+                        : "none",
+                    }}
                     title={color.name}
                   />
                 ))}
@@ -164,17 +180,20 @@ export default function ProductDetailPage() {
 
             {/* Size Picker */}
             <div className="mb-6">
-              <p className="text-sm font-semibold text-brand-brown mb-3">Size</p>
-              <div className="flex gap-2">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-3" style={{ fontWeight: 600 }}>
+                Size
+              </p>
+              <div className="flex gap-0">
                 {product.sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`px-5 py-2 rounded-full text-sm font-medium border-[1.5px] transition-all ${
+                    className={`px-5 py-2.5 text-[11px] uppercase tracking-[0.12em] border border-luxe-border -ml-px first:ml-0 transition-colors duration-200 ${
                       selectedSize === size
-                        ? "bg-brand-brown text-brand-cream-light border-brand-brown"
-                        : "border-brand-cream-dark text-brand-brown hover:border-brand-brown"
+                        ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                        : "bg-white text-luxe-text-secondary hover:text-luxe-text"
                     }`}
+                    style={{ fontWeight: 500 }}
                   >
                     {size}
                   </button>
@@ -184,13 +203,21 @@ export default function ProductDetailPage() {
 
             {/* Quantity */}
             <div className="flex items-center gap-4 mb-6">
-              <p className="text-sm font-semibold text-brand-brown">Quantity</p>
-              <div className="flex items-center gap-3 bg-brand-cream-light rounded-full border border-brand-cream-dark px-4 py-2">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="hover:text-brand-gold">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-luxe-text" style={{ fontWeight: 600 }}>
+                Quantity
+              </p>
+              <div className="flex items-center border border-luxe-border">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="px-3 py-2 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
+                >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="w-6 text-center font-medium">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="hover:text-brand-gold">
+                <span className="w-10 text-center text-[14px]" style={{ fontWeight: 500 }}>{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="px-3 py-2 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
+                >
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
@@ -200,26 +227,30 @@ export default function ProductDetailPage() {
             <div className="flex gap-4 mb-8">
               <button
                 onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full border-[1.5px] border-brand-gold text-brand-brown font-semibold hover:bg-brand-gold/10 transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-4 border border-luxe-border-emphasis text-luxe-text text-[11px] uppercase tracking-[0.2em] hover:border-luxe-text transition-colors duration-200"
+                style={{ fontWeight: 500 }}
               >
-                <ShoppingBag className="w-5 h-5" />
+                <ShoppingBag className="w-4 h-4" />
                 Add to Cart
               </button>
               <button
                 onClick={handleBuyNow}
-                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full bg-brand-gold text-white font-semibold hover:bg-brand-gold-hover transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200"
+                style={{ fontWeight: 500 }}
               >
-                <Zap className="w-5 h-5" />
+                <Zap className="w-4 h-4" />
                 Buy Now
               </button>
             </div>
 
             {/* Perks */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4 pt-6 border-t border-luxe-border">
               {perks.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-2 text-sm text-brand-brown-light">
-                  <Icon className="w-4 h-4 text-brand-gold" />
-                  {label}
+                <div key={label} className="flex items-center gap-2.5">
+                  <Icon className="w-4 h-4 text-luxe-gold" strokeWidth={1.5} />
+                  <span className="text-[11px] text-luxe-text-secondary" style={{ fontWeight: 400 }}>
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>

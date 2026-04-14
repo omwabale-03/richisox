@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, SlidersHorizontal, ShoppingBag, Star, Plus } from "lucide-react";
+import { Search, SlidersHorizontal, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import toast from "react-hot-toast";
 import { IProduct } from "@/types";
@@ -155,6 +155,11 @@ function ProductsContent() {
   const [sort, setSort] = useState("newest");
   const [showFilters, setShowFilters] = useState(false);
 
+  useEffect(() => {
+    setCategory(searchParams.get("category") || "all");
+    setType(searchParams.get("type") || "all");
+  }, [searchParams]);
+
   const filtered = products
     .filter((p) => {
       if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
@@ -175,29 +180,34 @@ function ProductsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-cream">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-luxe-bg">
+      <div className="max-w-[1400px] mx-auto px-[4%] py-10">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-playfair font-bold text-brand-brown">All Socks</h1>
-            <p className="text-brand-brown-light/60 text-sm mt-1">{filtered.length} products</p>
+            <p className="eyebrow mb-2">Our Collection</p>
+            <h1 className="font-playfair text-luxe-text" style={{ fontWeight: 400, fontSize: "clamp(28px, 3vw, 40px)" }}>
+              All <em className="font-playfair italic">Socks</em>
+            </h1>
+            <p className="text-[12px] text-luxe-muted mt-1">{filtered.length} products</p>
           </div>
           <div className="sm:ml-auto flex items-center gap-3">
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-brand-cream-dark" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-luxe-muted" />
               <input
                 type="text"
                 placeholder="Search socks..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 rounded-xl border border-brand-cream-dark bg-brand-cream-light text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold w-64 text-brand-brown"
+                className="pl-10 pr-4 py-2.5 border border-luxe-border bg-white text-[13px] text-luxe-text w-64 placeholder:text-luxe-muted"
+                style={{ fontWeight: 300 }}
               />
             </div>
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="px-4 py-2 rounded-xl border border-brand-cream-dark bg-brand-cream-light text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown"
+              className="px-4 py-2.5 border border-luxe-border bg-white text-[13px] text-luxe-text"
+              style={{ fontWeight: 400 }}
             >
               {sortOptions.map((o) => (
                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -205,7 +215,8 @@ function ProductsContent() {
             </select>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-brand-cream-dark bg-brand-cream-light text-sm hover:bg-brand-cream transition-colors text-brand-brown"
+              className="flex items-center gap-2 px-4 py-2.5 border border-luxe-border bg-white text-[11px] uppercase tracking-[0.15em] text-luxe-text-secondary hover:text-luxe-text hover:border-luxe-text transition-colors duration-200"
+              style={{ fontWeight: 500 }}
             >
               <SlidersHorizontal className="w-4 h-4" />
               Filters
@@ -213,40 +224,43 @@ function ProductsContent() {
           </div>
         </div>
 
+        {/* Category Filter Strip */}
+        <div className="flex flex-wrap gap-0 mb-8">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategory(cat)}
+              className={`px-5 py-2.5 text-[11px] uppercase tracking-[0.15em] transition-colors duration-200 border border-luxe-border -ml-px first:ml-0 ${
+                category === cat
+                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                  : "bg-white text-luxe-text-secondary hover:text-luxe-text"
+              }`}
+              style={{ fontWeight: 500 }}
+            >
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </button>
+          ))}
+        </div>
+
         {/* Filters */}
         {showFilters && (
-          <div className="bg-brand-cream-light rounded-2xl p-6 mb-8 border border-brand-cream-dark">
+          <div className="bg-white p-6 mb-8 border border-luxe-border">
             <div className="flex flex-col sm:flex-row gap-6">
               <div>
-                <p className="text-sm font-semibold text-brand-brown mb-3">Category</p>
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setCategory(cat)}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                        category === cat
-                          ? "bg-brand-brown text-brand-cream-light"
-                          : "bg-brand-cream text-brand-brown-light hover:bg-brand-cream-dark"
-                      }`}
-                    >
-                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-brand-brown mb-3">Type</p>
-                <div className="flex flex-wrap gap-2">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-3" style={{ fontWeight: 600 }}>
+                  Type
+                </p>
+                <div className="flex flex-wrap gap-0">
                   {types.map((t) => (
                     <button
                       key={t}
                       onClick={() => setType(t)}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                      className={`px-4 py-2 text-[11px] uppercase tracking-[0.12em] border border-luxe-border -ml-px first:ml-0 transition-colors duration-200 ${
                         type === t
-                          ? "bg-brand-gold text-white"
-                          : "bg-brand-cream text-brand-brown-light hover:bg-brand-cream-dark"
+                          ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                          : "bg-white text-luxe-text-secondary hover:text-luxe-text"
                       }`}
+                      style={{ fontWeight: 500 }}
                     >
                       {t.charAt(0).toUpperCase() + t.slice(1)}
                     </button>
@@ -256,7 +270,8 @@ function ProductsContent() {
               {(category !== "all" || type !== "all" || search) && (
                 <button
                   onClick={() => { setCategory("all"); setType("all"); setSearch(""); }}
-                  className="sm:ml-auto text-sm text-brand-gold hover:underline self-start sm:self-center"
+                  className="sm:ml-auto text-[11px] uppercase tracking-[0.15em] text-luxe-gold hover:text-luxe-text transition-colors duration-200 self-start sm:self-center border-b border-luxe-gold pb-0.5"
+                  style={{ fontWeight: 500 }}
                 >
                   Clear All
                 </button>
@@ -268,74 +283,106 @@ function ProductsContent() {
         {/* Product Grid */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
-            <ShoppingBag className="w-16 h-16 text-brand-cream-dark mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-brand-brown mb-2">No products found</h3>
-            <p className="text-brand-brown-light/60 mb-6">Try adjusting your filters</p>
+            <ShoppingBag className="w-16 h-16 text-luxe-border mx-auto mb-4" />
+            <h3 className="font-playfair text-luxe-text mb-2" style={{ fontWeight: 400 }}>No products found</h3>
+            <p className="text-[13px] text-luxe-muted mb-6" style={{ fontWeight: 300 }}>Try adjusting your filters</p>
             <button
               onClick={() => { setCategory("all"); setType("all"); setSearch(""); }}
-              className="px-6 py-3 bg-brand-gold text-white rounded-full hover:bg-brand-gold-hover transition-colors"
+              className="px-[44px] py-3.5 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200"
+              style={{ fontWeight: 500 }}
             >
               Clear Filters
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="luxe-product-grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {filtered.map((product) => (
               <div
                 key={product._id}
-                className="group bg-brand-cream-light rounded-2xl overflow-hidden border border-brand-cream-dark hover:-translate-y-1 hover:shadow-md transition-all duration-300"
+                className="group bg-white overflow-hidden"
               >
                 <Link href={`/products/${product._id}`} className="block">
-                  <div className="relative h-56 bg-brand-cream overflow-hidden">
+                  <div className="relative h-64 bg-luxe-image-bg overflow-hidden">
                     <Image
                       src={product.images[0]}
                       alt={product.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
+                      style={{ transitionTimingFunction: "cubic-bezier(0.25,0.46,0.45,0.94)" }}
                     />
+                    {/* Badge */}
+                    {product.isFeatured && (
+                      <span
+                        className="absolute top-3 left-3 bg-[#1A1A1A] text-white text-[8px] uppercase tracking-[0.15em] px-2.5 py-1"
+                        style={{ fontWeight: 500 }}
+                      >
+                        Best Seller
+                      </span>
+                    )}
                     {product.comparePrice && (
-                      <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      <span
+                        className="absolute top-3 left-3 bg-luxe-sale text-white text-[8px] uppercase tracking-[0.15em] px-2.5 py-1"
+                        style={{ fontWeight: 500, left: product.isFeatured ? "auto" : "12px", right: product.isFeatured ? "12px" : "auto", top: product.isFeatured ? "12px" : "12px" }}
+                      >
                         -{Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}%
                       </span>
                     )}
-                    <span className="absolute top-3 right-3 bg-brand-cream-light/90 text-brand-brown text-xs font-medium px-2 py-1 rounded-full capitalize">
-                      {product.category}
-                    </span>
+                    {/* Wishlist heart placeholder */}
+                    <button className="absolute top-3 right-3 w-8 h-8 bg-white border border-luxe-border flex items-center justify-center text-luxe-muted hover:text-luxe-text transition-colors duration-200">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      </svg>
+                    </button>
+                    {/* Add to Bag hover bar */}
+                    <div
+                      className="absolute inset-x-0 bottom-0 bg-[#1A1A1A] text-white text-center py-3 text-[11px] uppercase tracking-[0.2em] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 cursor-pointer"
+                      style={{ fontWeight: 500 }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAddToCart(product);
+                      }}
+                    >
+                      Add to Bag
+                    </div>
                   </div>
                   <div className="p-4">
-                    <p className="text-xs text-brand-brown-light/50 uppercase tracking-wider mb-1 capitalize">{product.type}</p>
-                    <h3 className="font-semibold text-brand-brown text-sm mb-2 line-clamp-2">{product.name}</h3>
-                    <div className="flex items-center gap-1 mb-2">
-                      <Star className="w-3 h-3 fill-brand-gold text-brand-gold" />
-                      <span className="text-xs text-brand-brown-light/60">{product.rating} ({product.reviewCount})</span>
-                    </div>
+                    <p className="text-[9px] uppercase tracking-[0.2em] text-luxe-gold mb-1.5" style={{ fontWeight: 500 }}>
+                      {product.type}
+                    </p>
+                    <h3 className="font-playfair text-[16px] text-luxe-text mb-2 line-clamp-2" style={{ fontWeight: 400 }}>
+                      {product.name}
+                    </h3>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="font-bold text-brand-brown">₹{product.price}</span>
+                      <span className="text-[16px] text-luxe-text" style={{ fontWeight: 500 }}>
+                        &#8377;{product.price}
+                      </span>
                       {product.comparePrice && (
-                        <span className="text-sm text-brand-cream-dark line-through">₹{product.comparePrice}</span>
+                        <>
+                          <span className="text-[13px] text-luxe-muted line-through">
+                            &#8377;{product.comparePrice}
+                          </span>
+                          <span className="text-[12px] text-luxe-sale" style={{ fontWeight: 500 }}>
+                            {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% off
+                          </span>
+                        </>
                       )}
                     </div>
-                    <div className="flex gap-1">
-                      {product.colors.slice(0, 4).map((c) => (
+                    {/* Color swatches */}
+                    <div className="flex gap-2">
+                      {product.colors.slice(0, 4).map((c, i) => (
                         <div
                           key={c.hex}
-                          className="w-4 h-4 rounded-full border border-brand-cream-dark"
-                          style={{ backgroundColor: c.hex }}
+                          className="w-[14px] h-[14px] rounded-full border border-luxe-border"
+                          style={{
+                            backgroundColor: c.hex,
+                            boxShadow: i === 0 ? "0 0 0 2px white, 0 0 0 3px #1A1A1A" : "none",
+                          }}
                           title={c.name}
                         />
                       ))}
                     </div>
                   </div>
                 </Link>
-                <div className="px-4 pb-4">
-                  <button
-                    onClick={() => handleAddToCart(product)}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-brand-gold text-white rounded-xl text-sm font-medium hover:bg-brand-gold-hover transition-colors"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Add to Cart
-                  </button>
-                </div>
               </div>
             ))}
           </div>
@@ -347,7 +394,7 @@ function ProductsContent() {
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-brand-cream" />}>
+    <Suspense fallback={<div className="min-h-screen bg-luxe-bg" />}>
       <ProductsContent />
     </Suspense>
   );

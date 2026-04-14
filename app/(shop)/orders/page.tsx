@@ -9,12 +9,12 @@ import { useAuthStore } from "@/store/authStore";
 import { IOrder } from "@/types";
 
 const statusColors: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-700",
-  confirmed: "bg-blue-100 text-blue-700",
-  processing: "bg-purple-100 text-purple-700",
-  shipped: "bg-indigo-100 text-indigo-700",
-  delivered: "bg-green-100 text-green-700",
-  cancelled: "bg-red-100 text-red-700",
+  pending: "bg-yellow-50 text-yellow-700 border border-yellow-200",
+  confirmed: "bg-blue-50 text-blue-700 border border-blue-200",
+  processing: "bg-purple-50 text-purple-700 border border-purple-200",
+  shipped: "bg-indigo-50 text-indigo-700 border border-indigo-200",
+  delivered: "bg-green-50 text-green-700 border border-green-200",
+  cancelled: "bg-red-50 text-red-700 border border-red-200",
 };
 
 const DEMO_ORDERS: IOrder[] = [
@@ -71,31 +71,40 @@ export default function OrdersPage() {
   }, [isLoggedIn, router]);
 
   return (
-    <div className="min-h-screen bg-brand-cream">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <h1 className="text-3xl font-playfair font-bold text-brand-brown mb-8">My Orders</h1>
+    <div className="min-h-screen bg-luxe-bg">
+      <div className="max-w-4xl mx-auto px-[4%] py-10">
+        <div className="mb-8">
+          <p className="eyebrow mb-2">Your Account</p>
+          <h1 className="font-playfair text-luxe-text" style={{ fontWeight: 400, fontSize: "clamp(28px, 3vw, 38px)" }}>
+            My <em className="font-playfair italic">Orders</em>
+          </h1>
+        </div>
 
         {orders.length === 0 ? (
           <div className="text-center py-20">
-            <Package className="w-16 h-16 text-brand-cream-dark mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-brand-brown mb-2">No orders yet</h3>
-            <p className="text-brand-brown-light/60 mb-6">Your orders will appear here</p>
-            <Link href="/products" className="px-6 py-3 bg-brand-gold text-white rounded-full hover:bg-brand-gold-hover transition-colors">
+            <Package className="w-16 h-16 text-luxe-border mx-auto mb-4" strokeWidth={1} />
+            <h3 className="font-playfair text-luxe-text mb-2" style={{ fontWeight: 400 }}>No orders yet</h3>
+            <p className="text-[13px] text-luxe-muted mb-6" style={{ fontWeight: 300 }}>Your orders will appear here</p>
+            <Link
+              href="/products"
+              className="px-[44px] py-3.5 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200 inline-block"
+              style={{ fontWeight: 500 }}
+            >
               Start Shopping
             </Link>
           </div>
         ) : (
-          <div className="space-y-4">
-            {orders.map((order) => (
+          <div className="space-y-0">
+            {orders.map((order, idx) => (
               <Link
                 key={order._id}
                 href={`/orders/${order._id}`}
-                className="block bg-brand-cream-light rounded-2xl p-5 border border-brand-cream-dark hover:shadow-md hover:-translate-y-0.5 transition-all group"
+                className={`block bg-white p-5 border border-luxe-border hover:bg-luxe-surface/50 transition-colors duration-200 group ${idx > 0 ? "-mt-px" : ""}`}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <p className="font-mono font-semibold text-brand-gold">{order.orderId}</p>
-                    <p className="text-xs text-brand-brown-light/50 mt-0.5">
+                    <p className="font-mono text-[13px] text-luxe-gold" style={{ fontWeight: 500 }}>{order.orderId}</p>
+                    <p className="text-[10px] text-luxe-muted mt-0.5">
                       {new Date(order.createdAt).toLocaleDateString("en-IN", {
                         day: "numeric",
                         month: "short",
@@ -104,28 +113,28 @@ export default function OrdersPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${statusColors[order.orderStatus]}`}>
+                    <span className={`px-3 py-1 text-[9px] uppercase tracking-[0.15em] capitalize ${statusColors[order.orderStatus]}`} style={{ fontWeight: 500 }}>
                       {order.orderStatus}
                     </span>
-                    <ChevronRight className="w-4 h-4 text-brand-cream-dark group-hover:text-brand-gold transition-colors" />
+                    <ChevronRight className="w-4 h-4 text-luxe-border group-hover:text-luxe-gold transition-colors duration-200" />
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex -space-x-2">
                     {order.items.slice(0, 3).map((item, i) => (
-                      <div key={i} className="relative w-12 h-12 rounded-xl overflow-hidden border-2 border-brand-cream-light">
+                      <div key={i} className="relative w-12 h-12 overflow-hidden border-2 border-white">
                         <Image src={item.image} alt={item.name} fill className="object-cover" />
                       </div>
                     ))}
                     {order.items.length > 3 && (
-                      <div className="w-12 h-12 rounded-xl bg-brand-cream border-2 border-brand-cream-light flex items-center justify-center text-xs font-semibold text-brand-brown-light">
+                      <div className="w-12 h-12 bg-luxe-surface border-2 border-white flex items-center justify-center text-[10px] text-luxe-muted" style={{ fontWeight: 500 }}>
                         +{order.items.length - 3}
                       </div>
                     )}
                   </div>
                   <div className="ml-2">
-                    <p className="text-sm text-brand-brown-light/60">{order.items.length} item{order.items.length > 1 ? "s" : ""}</p>
-                    <p className="font-bold text-brand-brown">₹{order.total.toFixed(0)}</p>
+                    <p className="text-[11px] text-luxe-muted">{order.items.length} item{order.items.length > 1 ? "s" : ""}</p>
+                    <p className="text-[14px] text-luxe-text" style={{ fontWeight: 500 }}>&#8377;{order.total.toFixed(0)}</p>
                   </div>
                 </div>
               </Link>

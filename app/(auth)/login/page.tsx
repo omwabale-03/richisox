@@ -62,28 +62,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-cream flex items-center justify-center px-4">
+    <div className="min-h-screen bg-luxe-bg flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <span className="text-xl">&#128081;</span>
-            <span className="text-4xl font-playfair font-bold text-brand-brown">
+        <div className="text-center mb-10">
+          <Link href="/" className="inline-flex items-center gap-0">
+            <span
+              className="font-playfair text-[32px] tracking-[0.08em] text-luxe-text"
+              style={{ fontWeight: 400 }}
+            >
               RichySox
             </span>
+            <span className="text-luxe-gold text-[32px] ml-0.5">.</span>
           </Link>
-          <p className="text-brand-brown-light/60 mt-2 text-sm">Elevate Your Feet With Timeless Luxury</p>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-luxe-muted mt-2" style={{ fontWeight: 500 }}>
+            Elevate Your Feet With Timeless Luxury
+          </p>
         </div>
 
-        <div className="bg-brand-cream-light rounded-3xl border border-brand-cream-dark p-8">
-          <h2 className="text-2xl font-playfair font-bold text-brand-brown mb-2">Welcome back</h2>
-          <p className="text-brand-brown-light/60 text-sm mb-6">Login or create an account with your mobile number</p>
+        <div className="bg-white border border-luxe-border p-8">
+          <h2 className="font-playfair text-[24px] text-luxe-text mb-2" style={{ fontWeight: 400 }}>
+            Welcome <em className="font-playfair italic">back</em>
+          </h2>
+          <p className="text-[13px] text-luxe-muted mb-6" style={{ fontWeight: 300 }}>
+            Login or create an account with your mobile number
+          </p>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-brand-brown mb-1">Mobile Number</label>
+              <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                Mobile Number
+              </label>
               <div className="flex">
-                <span className="flex items-center px-3 border border-r-0 border-brand-cream-dark rounded-l-xl bg-brand-cream text-sm text-brand-brown-light">
+                <span className="flex items-center px-3 border border-r-0 border-luxe-border bg-luxe-surface text-[12px] text-luxe-muted">
                   +91
                 </span>
                 <input
@@ -92,7 +103,8 @@ export default function LoginPage() {
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
                   disabled={otpSent}
-                  className="flex-1 px-4 py-3 border border-brand-cream-dark rounded-r-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm bg-white disabled:bg-brand-cream/50 text-brand-brown"
+                  className="flex-1 px-4 py-3 border border-luxe-border text-[13px] bg-white disabled:bg-luxe-surface/50 text-luxe-text placeholder:text-luxe-muted"
+                  style={{ fontWeight: 300 }}
                 />
               </div>
             </div>
@@ -101,42 +113,50 @@ export default function LoginPage() {
               <button
                 onClick={handleSendOtp}
                 disabled={loading}
-                className="w-full py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
+                className="w-full py-3.5 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200 disabled:opacity-50"
+                style={{ fontWeight: 500 }}
               >
                 {loading ? "Sending..." : "Send OTP"}
               </button>
             ) : (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-brand-brown mb-1">OTP</label>
+                  <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                    OTP
+                  </label>
                   <input
                     type="text"
                     placeholder="Enter 6-digit OTP"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                    className="w-full px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-center text-2xl tracking-widest font-mono bg-white text-brand-brown"
+                    className="w-full px-4 py-3 border border-luxe-border text-center text-[20px] tracking-[0.3em] font-mono bg-white text-luxe-text"
+                    style={{ fontWeight: 400 }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-brand-brown mb-1">Full Name (for new users)</label>
+                  <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                    Full Name (for new users)
+                  </label>
                   <input
                     type="text"
                     placeholder="Your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm bg-white text-brand-brown"
+                    className="w-full px-4 py-3 border border-luxe-border text-[13px] bg-white text-luxe-text placeholder:text-luxe-muted"
+                    style={{ fontWeight: 300 }}
                   />
                 </div>
                 <button
                   onClick={handleVerifyOtp}
                   disabled={loading}
-                  className="w-full py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
+                  className="w-full py-3.5 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200 disabled:opacity-50"
+                  style={{ fontWeight: 500 }}
                 >
                   {loading ? "Verifying..." : "Verify & Login"}
                 </button>
                 <button
                   onClick={() => { setOtpSent(false); setOtp(""); }}
-                  className="w-full text-sm text-brand-brown-light/60 hover:text-brand-brown transition-colors"
+                  className="w-full text-[11px] text-luxe-muted hover:text-luxe-text transition-colors duration-200"
                 >
                   &larr; Change number / Resend OTP
                 </button>
@@ -145,11 +165,11 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-brand-brown-light/50 mt-6">
+        <p className="text-center text-[10px] text-luxe-muted mt-6">
           By continuing, you agree to our{" "}
-          <Link href="#" className="text-brand-gold hover:underline">Terms of Service</Link>
+          <Link href="#" className="text-luxe-gold hover:text-luxe-text transition-colors duration-200 border-b border-luxe-gold">Terms of Service</Link>
           {" "}and{" "}
-          <Link href="#" className="text-brand-gold hover:underline">Privacy Policy</Link>
+          <Link href="#" className="text-luxe-gold hover:text-luxe-text transition-colors duration-200 border-b border-luxe-gold">Privacy Policy</Link>
         </p>
       </div>
     </div>

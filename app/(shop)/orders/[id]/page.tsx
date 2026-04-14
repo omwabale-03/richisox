@@ -29,12 +29,12 @@ const DEMO_ORDER = {
 const ORDER_STEPS = ["pending", "confirmed", "processing", "shipped", "delivered"];
 
 const statusColors: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-700",
-  confirmed: "bg-blue-100 text-blue-700",
-  processing: "bg-purple-100 text-purple-700",
-  shipped: "bg-indigo-100 text-indigo-700",
-  delivered: "bg-green-100 text-green-700",
-  cancelled: "bg-red-100 text-red-700",
+  pending: "bg-yellow-50 text-yellow-700 border border-yellow-200",
+  confirmed: "bg-blue-50 text-blue-700 border border-blue-200",
+  processing: "bg-purple-50 text-purple-700 border border-purple-200",
+  shipped: "bg-indigo-50 text-indigo-700 border border-indigo-200",
+  delivered: "bg-green-50 text-green-700 border border-green-200",
+  cancelled: "bg-red-50 text-red-700 border border-red-200",
 };
 
 export default function OrderDetailPage() {
@@ -52,18 +52,18 @@ export default function OrderDetailPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-brand-cream">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-luxe-bg">
+      <div className="max-w-4xl mx-auto px-[4%] py-10">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Link href="/orders" className="flex items-center gap-1 text-sm text-brand-brown-light/60 hover:text-brand-gold transition-colors">
+          <Link href="/orders" className="flex items-center gap-1 text-[11px] uppercase tracking-[0.12em] text-luxe-muted hover:text-luxe-text transition-colors duration-200" style={{ fontWeight: 500 }}>
             <ChevronLeft className="w-4 h-4" /> Orders
           </Link>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-playfair font-bold text-brand-brown font-mono">
+            <h1 className="font-playfair text-luxe-text font-mono" style={{ fontWeight: 400, fontSize: "22px" }}>
               {order.orderId}
             </h1>
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${statusColors[order.orderStatus]}`}>
+            <span className={`px-3 py-1 text-[9px] uppercase tracking-[0.15em] capitalize ${statusColors[order.orderStatus]}`} style={{ fontWeight: 500 }}>
               {order.orderStatus}
             </span>
           </div>
@@ -73,32 +73,36 @@ export default function OrderDetailPage() {
           {/* Left Column */}
           <div className="md:col-span-2 space-y-6">
             {/* Tracking */}
-            <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
-              <h2 className="text-lg font-semibold text-brand-brown mb-4">Order Tracking</h2>
+            <div className="bg-white p-6 border border-luxe-border">
+              <h2 className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-4" style={{ fontWeight: 600 }}>
+                Order Tracking
+              </h2>
               {order.trackingNumber && (
-                <div className="bg-brand-cream rounded-xl p-3 mb-4 text-sm">
-                  <span className="text-brand-brown-light/60">Tracking: </span>
-                  <span className="font-mono font-semibold text-brand-gold">{order.trackingNumber}</span>
-                  {order.courier && <span className="text-brand-brown-light/50 ml-2">via {order.courier}</span>}
+                <div className="bg-luxe-surface p-3 mb-4 text-[12px] border border-luxe-border">
+                  <span className="text-luxe-muted">Tracking: </span>
+                  <span className="font-mono text-luxe-gold" style={{ fontWeight: 500 }}>{order.trackingNumber}</span>
+                  {order.courier && <span className="text-luxe-muted ml-2">via {order.courier}</span>}
                 </div>
               )}
               <OrderTracking steps={trackingSteps} />
             </div>
 
             {/* Items */}
-            <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
-              <h2 className="text-lg font-semibold text-brand-brown mb-4">Items</h2>
+            <div className="bg-white p-6 border border-luxe-border">
+              <h2 className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-4" style={{ fontWeight: 600 }}>
+                Items
+              </h2>
               <div className="space-y-4">
                 {order.items.map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
-                    <div className="relative w-16 h-16 bg-brand-cream rounded-xl overflow-hidden flex-shrink-0">
+                    <div className="relative w-16 h-16 bg-luxe-image-bg overflow-hidden flex-shrink-0">
                       <Image src={item.image} alt={item.name} fill className="object-cover" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-brand-brown">{item.name}</p>
-                      <p className="text-sm text-brand-brown-light/60">{item.size} &middot; {item.color} &middot; Qty: {item.quantity}</p>
+                      <p className="font-playfair text-[14px] text-luxe-text" style={{ fontWeight: 400 }}>{item.name}</p>
+                      <p className="text-[11px] text-luxe-muted">{item.size} &middot; {item.color} &middot; Qty: {item.quantity}</p>
                     </div>
-                    <span className="font-semibold text-brand-brown">₹{(item.price * item.quantity).toFixed(0)}</span>
+                    <span className="text-[14px] text-luxe-text" style={{ fontWeight: 500 }}>&#8377;{(item.price * item.quantity).toFixed(0)}</span>
                   </div>
                 ))}
               </div>
@@ -108,10 +112,12 @@ export default function OrderDetailPage() {
           {/* Right Column */}
           <div className="space-y-6">
             {/* Delivery Address */}
-            <div className="bg-brand-cream-light rounded-2xl p-5 border border-brand-cream-dark">
-              <h2 className="font-semibold text-brand-brown mb-3">Delivery Address</h2>
-              <div className="text-sm text-brand-brown-light/60 space-y-1">
-                <p className="font-medium text-brand-brown">{order.address.name}</p>
+            <div className="bg-white p-5 border border-luxe-border">
+              <h2 className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-3" style={{ fontWeight: 600 }}>
+                Delivery Address
+              </h2>
+              <div className="text-[12px] text-luxe-text-secondary space-y-1" style={{ fontWeight: 300 }}>
+                <p className="text-luxe-text" style={{ fontWeight: 500 }}>{order.address.name}</p>
                 <p>{order.address.mobile}</p>
                 <p>{order.address.street}</p>
                 <p>{order.address.city}, {order.address.state} {order.address.pincode}</p>
@@ -120,30 +126,32 @@ export default function OrderDetailPage() {
             </div>
 
             {/* Payment */}
-            <div className="bg-brand-cream-light rounded-2xl p-5 border border-brand-cream-dark">
-              <h2 className="font-semibold text-brand-brown mb-3">Payment Summary</h2>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-brand-brown-light/60">
+            <div className="bg-white p-5 border border-luxe-border">
+              <h2 className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-3" style={{ fontWeight: 600 }}>
+                Payment Summary
+              </h2>
+              <div className="space-y-2 text-[12px]">
+                <div className="flex justify-between text-luxe-muted">
                   <span>Subtotal</span>
-                  <span>₹{order.subtotal}</span>
+                  <span>&#8377;{order.subtotal}</span>
                 </div>
                 {order.discount > 0 && (
                   <div className="flex justify-between text-green-700">
                     <span>Discount ({order.coupon})</span>
-                    <span>-₹{order.discount}</span>
+                    <span>-&#8377;{order.discount}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-brand-brown-light/60">
+                <div className="flex justify-between text-luxe-muted">
                   <span>Shipping</span>
                   <span>{order.shipping === 0 ? "FREE" : `₹${order.shipping}`}</span>
                 </div>
-                <div className="flex justify-between font-bold text-brand-brown border-t border-brand-cream-dark pt-2">
-                  <span>Total</span>
-                  <span>₹{order.total}</span>
+                <div className="flex justify-between text-luxe-text border-t border-luxe-border pt-2">
+                  <span style={{ fontWeight: 600 }}>Total</span>
+                  <span style={{ fontWeight: 500 }}>&#8377;{order.total}</span>
                 </div>
-                <div className="flex justify-between text-xs mt-2">
-                  <span className="text-brand-brown-light/50">Payment Status</span>
-                  <span className={`font-semibold capitalize ${order.paymentStatus === "paid" ? "text-green-700" : "text-red-600"}`}>
+                <div className="flex justify-between text-[10px] mt-2">
+                  <span className="text-luxe-muted">Payment Status</span>
+                  <span className={`uppercase tracking-[0.1em] capitalize ${order.paymentStatus === "paid" ? "text-green-700" : "text-luxe-sale"}`} style={{ fontWeight: 500 }}>
                     {order.paymentStatus}
                   </span>
                 </div>

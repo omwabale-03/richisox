@@ -3,39 +3,48 @@ import { FaInstagram, FaFacebook, FaTwitter, FaYoutube } from "react-icons/fa";
 
 export function Footer() {
   return (
-    <footer className="bg-brand-brown text-brand-cream-light">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <footer className="bg-white border-t border-luxe-border">
+      <div className="max-w-[1400px] mx-auto px-[4%] py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-xl">&#128081;</span>
-              <span className="text-2xl font-playfair font-bold text-brand-cream-light">
+            <div className="flex items-center gap-0 mb-4">
+              <span
+                className="font-playfair text-[22px] tracking-[0.08em] text-luxe-text"
+                style={{ fontWeight: 400 }}
+              >
                 RichySox
               </span>
+              <span className="text-luxe-gold text-[22px] ml-0.5">.</span>
             </div>
-            <p className="text-brand-cream-dark/80 text-sm leading-relaxed mb-6">
-              We curate a collection of premium high-quality socks for those who demand sophisticated style without compromising on artisanal comfort.
+            <p className="text-body-sm text-luxe-text-secondary leading-relaxed mb-6" style={{ fontWeight: 300 }}>
+              We curate a collection of premium high-quality socks for those who demand
+              sophisticated style without compromising on artisanal comfort.
             </p>
-            <div className="flex items-center gap-4">
-              <a href="#" className="text-brand-cream-dark/60 hover:text-brand-gold transition-colors">
-                <FaInstagram className="w-5 h-5" />
+            <div className="flex items-center gap-5">
+              <a href="#" className="text-luxe-muted hover:text-luxe-text transition-colors duration-200">
+                <FaInstagram className="w-[18px] h-[18px]" />
               </a>
-              <a href="#" className="text-brand-cream-dark/60 hover:text-brand-gold transition-colors">
-                <FaFacebook className="w-5 h-5" />
+              <a href="#" className="text-luxe-muted hover:text-luxe-text transition-colors duration-200">
+                <FaFacebook className="w-[18px] h-[18px]" />
               </a>
-              <a href="#" className="text-brand-cream-dark/60 hover:text-brand-gold transition-colors">
-                <FaTwitter className="w-5 h-5" />
+              <a href="#" className="text-luxe-muted hover:text-luxe-text transition-colors duration-200">
+                <FaTwitter className="w-[18px] h-[18px]" />
               </a>
-              <a href="#" className="text-brand-cream-dark/60 hover:text-brand-gold transition-colors">
-                <FaYoutube className="w-5 h-5" />
+              <a href="#" className="text-luxe-muted hover:text-luxe-text transition-colors duration-200">
+                <FaYoutube className="w-[18px] h-[18px]" />
               </a>
             </div>
           </div>
 
           {/* Shop */}
           <div>
-            <h4 className="font-semibold text-brand-gold mb-4 text-sm uppercase tracking-wider">Shop</h4>
+            <h4
+              className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-5"
+              style={{ fontWeight: 600 }}
+            >
+              Shop
+            </h4>
             <ul className="space-y-3">
               {[
                 { href: "/products?category=men", label: "Men's Collection" },
@@ -47,7 +56,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-brand-cream-dark/70 hover:text-brand-gold transition-colors text-sm"
+                    className="text-[12px] text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -58,7 +67,12 @@ export function Footer() {
 
           {/* Help */}
           <div>
-            <h4 className="font-semibold text-brand-gold mb-4 text-sm uppercase tracking-wider">Help</h4>
+            <h4
+              className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-5"
+              style={{ fontWeight: 600 }}
+            >
+              Help
+            </h4>
             <ul className="space-y-3">
               {[
                 { href: "/orders", label: "Track My Order" },
@@ -70,7 +84,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-brand-cream-dark/70 hover:text-brand-gold transition-colors text-sm"
+                    className="text-[12px] text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -81,19 +95,26 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-brand-gold mb-4 text-sm uppercase tracking-wider">Contact</h4>
-            <ul className="space-y-3 text-sm text-brand-cream-dark/70">
+            <h4
+              className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-5"
+              style={{ fontWeight: 600 }}
+            >
+              Contact
+            </h4>
+            <ul className="space-y-3 text-[12px] text-luxe-text-secondary">
               <li>hello@richysox.com</li>
               <li>+91 98765 43210</li>
               <li>Mon-Sat, 9am-6pm IST</li>
             </ul>
             <div className="mt-6">
-              <p className="text-xs text-brand-cream-dark/50 mb-2">We accept</p>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-luxe-muted mb-2" style={{ fontWeight: 500 }}>
+                We accept
+              </p>
               <div className="flex items-center gap-2 flex-wrap">
                 {["UPI", "Visa", "Mastercard", "Net Banking"].map((method) => (
                   <span
                     key={method}
-                    className="px-2 py-1 bg-white/10 border border-brand-gold/20 rounded text-xs text-brand-cream-dark/80"
+                    className="px-2.5 py-1 bg-luxe-surface border border-luxe-border text-[10px] text-luxe-text-secondary uppercase tracking-[0.1em]"
                   >
                     {method}
                   </span>
@@ -105,14 +126,14 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-brand-gold/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-brand-cream-dark/50 text-sm">&copy; 2024 RichySox. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link href="#" className="text-brand-cream-dark/50 hover:text-brand-gold text-xs transition-colors">
+      <div className="border-t border-luxe-border">
+        <div className="max-w-[1400px] mx-auto px-[4%] py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <p className="text-[11px] text-luxe-muted">&copy; 2024 RichySox. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <Link href="#" className="text-[11px] text-luxe-muted hover:text-luxe-text transition-colors duration-200">
               Privacy Policy
             </Link>
-            <Link href="#" className="text-brand-cream-dark/50 hover:text-brand-gold text-xs transition-colors">
+            <Link href="#" className="text-[11px] text-luxe-muted hover:text-luxe-text transition-colors duration-200">
               Terms of Service
             </Link>
           </div>

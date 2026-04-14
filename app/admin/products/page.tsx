@@ -100,12 +100,14 @@ export default function AdminProductsPage() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-playfair font-bold text-brand-brown">Products</h1>
-          <p className="text-gray-500 mt-1">{products.filter((p) => p.isActive).length} active products</p>
+          <p className="eyebrow mb-2">Manage</p>
+          <h1 className="font-playfair text-luxe-text" style={{ fontWeight: 400, fontSize: "28px" }}>Products</h1>
+          <p className="text-[12px] text-luxe-muted mt-1">{products.filter((p) => p.isActive).length} active products</p>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-5 py-2.5 bg-brand-brown text-white rounded-xl hover:bg-brand-gold-hover transition-colors font-medium"
+          className="flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.15em] hover:bg-[#333] transition-colors duration-200"
+          style={{ fontWeight: 500 }}
         >
           <Plus className="w-4 h-4" />
           Add Product
@@ -114,60 +116,61 @@ export default function AdminProductsPage() {
 
       {/* Search */}
       <div className="relative mb-6">
-        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-luxe-muted" />
         <input
           type="text"
           placeholder="Search by name or SKU..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md pl-10 pr-4 py-2.5 rounded-xl border border-brand-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm"
+          className="w-full max-w-md pl-10 pr-4 py-2.5 border border-luxe-border bg-white text-[13px] text-luxe-text placeholder:text-luxe-muted"
+          style={{ fontWeight: 300 }}
         />
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-luxe-border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-brand-cream">
+            <thead className="bg-luxe-surface">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Product</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Price</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Stock</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-[9px] uppercase tracking-[0.15em] text-luxe-muted" style={{ fontWeight: 600 }}>Product</th>
+                <th className="px-6 py-3 text-left text-[9px] uppercase tracking-[0.15em] text-luxe-muted" style={{ fontWeight: 600 }}>Category</th>
+                <th className="px-6 py-3 text-left text-[9px] uppercase tracking-[0.15em] text-luxe-muted" style={{ fontWeight: 600 }}>Price</th>
+                <th className="px-6 py-3 text-left text-[9px] uppercase tracking-[0.15em] text-luxe-muted" style={{ fontWeight: 600 }}>Stock</th>
+                <th className="px-6 py-3 text-left text-[9px] uppercase tracking-[0.15em] text-luxe-muted" style={{ fontWeight: 600 }}>Status</th>
+                <th className="px-6 py-3 text-left text-[9px] uppercase tracking-[0.15em] text-luxe-muted" style={{ fontWeight: 600 }}>Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-brand-cream">
+            <tbody className="divide-y divide-luxe-border">
               {filtered.map((p) => (
-                <tr key={p._id} className="hover:bg-brand-cream/30 transition-colors">
+                <tr key={p._id} className="hover:bg-luxe-surface/50 transition-colors duration-200">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-cream flex-shrink-0">
+                      <div className="relative w-10 h-10 overflow-hidden bg-luxe-image-bg flex-shrink-0">
                         <Image src={p.images[0]} alt={p.name} fill className="object-cover" />
                       </div>
                       <div>
-                        <p className="font-medium text-brand-brown text-sm">{p.name}</p>
-                        <p className="text-xs text-gray-400 font-mono">{p.sku}</p>
+                        <p className="text-[12px] text-luxe-text" style={{ fontWeight: 500 }}>{p.name}</p>
+                        <p className="text-[10px] text-luxe-muted font-mono">{p.sku}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600 capitalize">{p.category} · {p.type}</span>
+                    <span className="text-[11px] text-luxe-text-secondary capitalize">{p.category} · {p.type}</span>
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <span className="font-semibold text-sm">₹{p.price}</span>
-                      {p.comparePrice && <span className="text-xs text-gray-400 line-through ml-1">₹{p.comparePrice}</span>}
+                      <span className="text-[12px] text-luxe-text" style={{ fontWeight: 500 }}>₹{p.price}</span>
+                      {p.comparePrice && <span className="text-[10px] text-luxe-muted line-through ml-1">₹{p.comparePrice}</span>}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`text-sm font-medium ${p.stock < 10 ? "text-red-600" : "text-green-600"}`}>
+                    <span className={`text-[12px] ${p.stock < 10 ? "text-luxe-sale" : "text-green-600"}`} style={{ fontWeight: 500 }}>
                       {p.stock}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${p.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                    <span className={`px-2.5 py-1 text-[9px] uppercase tracking-[0.12em] ${p.isActive ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-500"}`} style={{ fontWeight: 500 }}>
                       {p.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
@@ -175,13 +178,13 @@ export default function AdminProductsPage() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => openEdit(p)}
-                        className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-1.5 text-blue-600 hover:bg-blue-50 transition-colors duration-200"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(p._id)}
-                        className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1.5 text-luxe-sale hover:bg-red-50 transition-colors duration-200"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -196,11 +199,13 @@ export default function AdminProductsPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b border-brand-cream">
-              <h3 className="text-xl font-playfair font-bold">{editProduct ? "Edit Product" : "Add Product"}</h3>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-brand-cream rounded-xl">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-luxe-border">
+            <div className="flex items-center justify-between p-6 border-b border-luxe-border">
+              <h3 className="font-playfair text-[20px] text-luxe-text" style={{ fontWeight: 400 }}>
+                {editProduct ? "Edit Product" : "Add Product"}
+              </h3>
+              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-luxe-surface transition-colors duration-200">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -218,58 +223,74 @@ export default function AdminProductsPage() {
                 { key: "tags", label: "Tags (comma-separated)", span: 2 },
               ].map(({ key, label, span, type, textarea }) => (
                 <div key={key} className={span === 2 ? "col-span-2" : ""}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                  <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                    {label}
+                  </label>
                   {textarea ? (
                     <textarea
                       rows={3}
                       value={form[key as keyof typeof form] as string}
                       onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
-                      className="w-full px-4 py-2 border border-brand-cream-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold resize-none"
+                      className="w-full px-4 py-2.5 border border-luxe-border text-[13px] resize-none text-luxe-text"
+                      style={{ fontWeight: 300 }}
                     />
                   ) : (
                     <input
                       type={type || "text"}
                       value={form[key as keyof typeof form] as string}
                       onChange={(e) => setForm((f) => ({ ...f, [key]: type === "number" ? Number(e.target.value) : e.target.value }))}
-                      className="w-full px-4 py-2 border border-brand-cream-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold"
+                      className="w-full px-4 py-2.5 border border-luxe-border text-[13px] text-luxe-text"
+                      style={{ fontWeight: 300 }}
                     />
                   )}
                 </div>
               ))}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                  Category
+                </label>
                 <select
                   value={form.category}
                   onChange={(e) => setForm((f) => ({ ...f, category: e.target.value as typeof f.category }))}
-                  className="w-full px-4 py-2 border border-brand-cream-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold"
+                  className="w-full px-4 py-2.5 border border-luxe-border text-[13px] text-luxe-text"
                 >
                   {["men", "women", "kids"].map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                  Type
+                </label>
                 <select
                   value={form.type}
                   onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as typeof f.type }))}
-                  className="w-full px-4 py-2 border border-brand-cream-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold"
+                  className="w-full px-4 py-2.5 border border-luxe-border text-[13px] text-luxe-text"
                 >
                   {["casual", "sports", "formal", "ankle", "crew"].map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
               </div>
               <div className="flex items-center gap-3">
-                <input type="checkbox" id="isActive" checked={form.isActive} onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked }))} className="w-4 h-4 accent-brand-gold" />
-                <label htmlFor="isActive" className="text-sm font-medium text-gray-700">Active</label>
+                <input type="checkbox" id="isActive" checked={form.isActive} onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked }))} className="w-4 h-4 accent-luxe-gold" />
+                <label htmlFor="isActive" className="text-[12px] text-luxe-text">Active</label>
               </div>
               <div className="flex items-center gap-3">
-                <input type="checkbox" id="isFeatured" checked={form.isFeatured} onChange={(e) => setForm((f) => ({ ...f, isFeatured: e.target.checked }))} className="w-4 h-4 accent-brand-gold" />
-                <label htmlFor="isFeatured" className="text-sm font-medium text-gray-700">Featured</label>
+                <input type="checkbox" id="isFeatured" checked={form.isFeatured} onChange={(e) => setForm((f) => ({ ...f, isFeatured: e.target.checked }))} className="w-4 h-4 accent-luxe-gold" />
+                <label htmlFor="isFeatured" className="text-[12px] text-luxe-text">Featured</label>
               </div>
             </div>
-            <div className="flex gap-3 p-6 border-t border-brand-cream">
-              <button onClick={() => setShowModal(false)} className="flex-1 py-3 border border-brand-cream-dark rounded-xl text-sm font-medium hover:bg-brand-cream transition-colors">
+            <div className="flex gap-3 p-6 border-t border-luxe-border">
+              <button
+                onClick={() => setShowModal(false)}
+                className="flex-1 py-3 border border-luxe-border-emphasis text-[11px] uppercase tracking-[0.15em] text-luxe-text-secondary hover:text-luxe-text hover:border-luxe-text transition-colors duration-200"
+                style={{ fontWeight: 500 }}
+              >
                 Cancel
               </button>
-              <button onClick={handleSave} className="flex-1 py-3 bg-brand-brown text-white rounded-xl text-sm font-medium hover:bg-brand-gold-hover transition-colors flex items-center justify-center gap-2">
+              <button
+                onClick={handleSave}
+                className="flex-1 py-3 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.15em] hover:bg-[#333] transition-colors duration-200 flex items-center justify-center gap-2"
+                style={{ fontWeight: 500 }}
+              >
                 <Check className="w-4 h-4" />
                 {editProduct ? "Update Product" : "Create Product"}
               </button>

@@ -22,28 +22,28 @@ const OrderTracking = React.forwardRef<HTMLDivElement, OrderTrackingProps>(
               <div key={index} className="flex">
                 <div className="flex flex-col items-center">
                   {step.isCompleted ? (
-                    <CheckCircle2 className="h-6 w-6 shrink-0 text-[#c9a84c]" />
+                    <CheckCircle2 className="h-5 w-5 shrink-0 text-luxe-gold" />
                   ) : (
-                    <Circle className="h-6 w-6 shrink-0 text-muted-foreground" />
+                    <Circle className="h-5 w-5 shrink-0 text-luxe-muted" />
                   )}
                   {index < steps.length - 1 && (
                     <div
-                      className={cn("w-[1.5px] grow", {
-                        "bg-[#c9a84c]": steps[index + 1].isCompleted,
-                        "bg-muted-foreground": !steps[index + 1].isCompleted,
+                      className={cn("w-px grow", {
+                        "bg-luxe-gold": steps[index + 1].isCompleted,
+                        "bg-luxe-border": !steps[index + 1].isCompleted,
                       })}
                     />
                   )}
                 </div>
                 <div className="ml-3 pb-6">
-                  <p className="text-sm font-medium">{step.name}</p>
-                  <p className="text-sm text-muted-foreground">{step.timestamp}</p>
+                  <p className="text-[12px] text-luxe-text" style={{ fontWeight: 500 }}>{step.name}</p>
+                  <p className="text-[11px] text-luxe-muted">{step.timestamp}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-foreground/80">This order has no tracking information.</p>
+          <p className="text-[13px] text-luxe-muted">This order has no tracking information.</p>
         )}
       </div>
     );

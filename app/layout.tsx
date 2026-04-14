@@ -7,12 +7,15 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
   display: "swap",
+  weight: ["300", "400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -38,11 +41,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           toastOptions={{
             duration: 3000,
             style: {
-              background: "#3b1a10",
-              color: "#faf6ee",
+              background: "#1A1A1A",
+              color: "#FFFFFF",
               fontFamily: "var(--font-dm-sans)",
-              borderRadius: "12px",
-              border: "1px solid #c9a84c",
+              borderRadius: "0px",
+              border: "1px solid #D8D3CC",
+              fontSize: "13px",
+              fontWeight: 400,
             },
           }}
         />

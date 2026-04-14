@@ -171,7 +171,7 @@ export default function CheckoutPage() {
             router.push(`/orders/${orderData.data._id}`);
           },
           prefill: { name: address.name, contact: address.mobile },
-          theme: { color: "#c9a84c" },
+          theme: { color: "#1A1A1A" },
         });
         rzp.open();
       };
@@ -183,9 +183,14 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-cream">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <h1 className="text-3xl font-playfair font-bold text-brand-brown mb-8 text-center">Checkout</h1>
+    <div className="min-h-screen bg-luxe-bg">
+      <div className="max-w-4xl mx-auto px-[4%] py-10">
+        <div className="text-center mb-8">
+          <p className="eyebrow mb-2">Secure Checkout</p>
+          <h1 className="font-playfair text-luxe-text" style={{ fontWeight: 400, fontSize: "clamp(28px, 3vw, 38px)" }}>
+            Checkout
+          </h1>
+        </div>
 
         {/* Step Indicator */}
         <div className="flex items-center justify-center gap-4 mb-10">
@@ -193,22 +198,28 @@ export default function CheckoutPage() {
             <div key={s.id} className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
+                  className={`w-10 h-10 flex items-center justify-center text-[12px] transition-all duration-200 ${
                     step > s.id
-                      ? "bg-brand-gold text-white"
+                      ? "bg-luxe-gold text-white"
                       : step === s.id
-                      ? "bg-brand-brown text-brand-cream-light"
-                      : "bg-brand-cream-dark text-brand-brown-light/40"
+                      ? "bg-[#1A1A1A] text-white"
+                      : "bg-luxe-surface text-luxe-muted border border-luxe-border"
                   }`}
+                  style={{ fontWeight: 500 }}
                 >
-                  {step > s.id ? <Check className="w-5 h-5" /> : s.id}
+                  {step > s.id ? <Check className="w-4 h-4" /> : s.id}
                 </div>
-                <span className={`text-sm font-medium hidden sm:block ${step === s.id ? "text-brand-brown" : "text-brand-brown-light/40"}`}>
+                <span
+                  className={`text-[11px] uppercase tracking-[0.12em] hidden sm:block ${
+                    step === s.id ? "text-luxe-text" : "text-luxe-muted"
+                  }`}
+                  style={{ fontWeight: 500 }}
+                >
                   {s.label}
                 </span>
               </div>
               {i < steps.length - 1 && (
-                <div className={`w-16 h-0.5 ${step > s.id ? "bg-brand-gold" : "bg-brand-cream-dark"}`} />
+                <div className={`w-16 h-px ${step > s.id ? "bg-luxe-gold" : "bg-luxe-border"}`} />
               )}
             </div>
           ))}
@@ -219,21 +230,24 @@ export default function CheckoutPage() {
           <div className="lg:col-span-3">
             {/* Step 1: OTP Login */}
             {step === 1 && (
-              <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
-                <h2 className="text-xl font-semibold text-brand-brown mb-6 flex items-center gap-2">
-                  <Phone className="w-5 h-5 text-brand-gold" /> Login with OTP
+              <div className="bg-white p-6 border border-luxe-border">
+                <h2 className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-6 flex items-center gap-2" style={{ fontWeight: 600 }}>
+                  <Phone className="w-4 h-4 text-luxe-gold" /> Login with OTP
                 </h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-brand-brown mb-1">Mobile Number</label>
+                    <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                      Mobile Number
+                    </label>
                     <div className="flex">
-                      <span className="flex items-center px-3 border border-r-0 border-brand-cream-dark rounded-l-xl bg-brand-cream text-sm text-brand-brown-light">+91</span>
+                      <span className="flex items-center px-3 border border-r-0 border-luxe-border bg-luxe-surface text-[12px] text-luxe-muted">+91</span>
                       <input
                         type="tel"
                         placeholder="10-digit mobile number"
                         value={mobile}
                         onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                        className="flex-1 px-4 py-3 border border-brand-cream-dark rounded-r-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm bg-white text-brand-brown"
+                        className="flex-1 px-4 py-3 border border-luxe-border text-[13px] bg-white text-luxe-text placeholder:text-luxe-muted"
+                        style={{ fontWeight: 300 }}
                       />
                     </div>
                   </div>
@@ -241,42 +255,50 @@ export default function CheckoutPage() {
                     <button
                       onClick={handleSendOtp}
                       disabled={loading}
-                      className="w-full py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
+                      className="w-full py-3.5 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200 disabled:opacity-50"
+                      style={{ fontWeight: 500 }}
                     >
                       {loading ? "Sending..." : "Send OTP"}
                     </button>
                   ) : (
                     <>
                       <div>
-                        <label className="block text-sm font-medium text-brand-brown mb-1">Enter OTP</label>
+                        <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                          Enter OTP
+                        </label>
                         <input
                           type="text"
                           placeholder="6-digit OTP"
                           value={otp}
                           onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                          className="w-full px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-center text-xl tracking-widest bg-white text-brand-brown"
+                          className="w-full px-4 py-3 border border-luxe-border text-center text-[20px] tracking-[0.3em] bg-white text-luxe-text"
+                          style={{ fontWeight: 400 }}
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-brand-brown mb-1">Your Name</label>
+                        <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                          Your Name
+                        </label>
                         <input
                           type="text"
                           placeholder="Full name (for new users)"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          className="w-full px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm bg-white text-brand-brown"
+                          className="w-full px-4 py-3 border border-luxe-border text-[13px] bg-white text-luxe-text placeholder:text-luxe-muted"
+                          style={{ fontWeight: 300 }}
                         />
                       </div>
                       <button
                         onClick={handleVerifyOtp}
                         disabled={loading}
-                        className="w-full py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
+                        className="w-full py-3.5 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200 disabled:opacity-50"
+                        style={{ fontWeight: 500 }}
                       >
                         {loading ? "Verifying..." : "Verify OTP"}
                       </button>
                       <button
                         onClick={() => { setOtpSent(false); setOtp(""); }}
-                        className="w-full py-2 text-sm text-brand-brown-light/60 hover:text-brand-brown"
+                        className="w-full py-2 text-[11px] text-luxe-muted hover:text-luxe-text transition-colors duration-200"
                       >
                         Resend OTP
                       </button>
@@ -288,9 +310,9 @@ export default function CheckoutPage() {
 
             {/* Step 2: Address */}
             {step === 2 && (
-              <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
-                <h2 className="text-xl font-semibold text-brand-brown mb-6 flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-brand-gold" /> Delivery Address
+              <div className="bg-white p-6 border border-luxe-border">
+                <h2 className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-6 flex items-center gap-2" style={{ fontWeight: 600 }}>
+                  <MapPin className="w-4 h-4 text-luxe-gold" /> Delivery Address
                 </h2>
                 <div className="grid grid-cols-2 gap-4">
                   {[
@@ -302,19 +324,23 @@ export default function CheckoutPage() {
                     { key: "pincode", label: "Pincode", span: 1, type: "text" },
                   ].map(({ key, label, span, type }) => (
                     <div key={key} className={span === 2 ? "col-span-2" : ""}>
-                      <label className="block text-sm font-medium text-brand-brown mb-1">{label}</label>
+                      <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
+                        {label}
+                      </label>
                       <input
                         type={type}
                         value={address[key as keyof typeof address]}
                         onChange={(e) => setAddress((a) => ({ ...a, [key]: e.target.value }))}
-                        className="w-full px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm bg-white text-brand-brown"
+                        className="w-full px-4 py-3 border border-luxe-border text-[13px] bg-white text-luxe-text"
+                        style={{ fontWeight: 300 }}
                       />
                     </div>
                   ))}
                 </div>
                 <button
                   onClick={handleAddressNext}
-                  className="w-full mt-6 py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors"
+                  className="w-full mt-6 py-3.5 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200"
+                  style={{ fontWeight: 500 }}
                 >
                   Continue to Payment
                 </button>
@@ -323,18 +349,18 @@ export default function CheckoutPage() {
 
             {/* Step 3: Payment */}
             {step === 3 && (
-              <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark">
-                <h2 className="text-xl font-semibold text-brand-brown mb-6 flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-brand-gold" /> Secure Payment
+              <div className="bg-white p-6 border border-luxe-border">
+                <h2 className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-6 flex items-center gap-2" style={{ fontWeight: 600 }}>
+                  <Lock className="w-4 h-4 text-luxe-gold" /> Secure Payment
                 </h2>
-                <div className="bg-brand-cream rounded-xl p-4 mb-6">
+                <div className="bg-luxe-surface p-4 mb-6 border border-luxe-border">
                   <div className="flex items-center gap-2 mb-2">
-                    <Lock className="w-4 h-4 text-green-700" />
-                    <span className="text-sm font-medium text-green-800">100% Secure via Razorpay</span>
+                    <Lock className="w-3.5 h-3.5 text-green-700" />
+                    <span className="text-[11px] text-green-800" style={{ fontWeight: 500 }}>100% Secure via Razorpay</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {["UPI", "Debit Card", "Credit Card", "Net Banking", "Wallets"].map((m) => (
-                      <span key={m} className="px-3 py-1 bg-brand-cream-light rounded-full text-xs font-medium text-brand-brown-light border border-brand-cream-dark">
+                      <span key={m} className="px-3 py-1 bg-white text-[10px] text-luxe-text-secondary border border-luxe-border uppercase tracking-[0.1em]">
                         {m}
                       </span>
                     ))}
@@ -343,33 +369,37 @@ export default function CheckoutPage() {
 
                 {/* Coupon */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-brand-brown mb-2">Coupon Code</label>
-                  <div className="flex gap-2">
+                  <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-2" style={{ fontWeight: 600 }}>
+                    Coupon Code
+                  </label>
+                  <div className="flex gap-0">
                     <input
                       type="text"
                       placeholder="Enter coupon code"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                       disabled={couponApplied}
-                      className="flex-1 px-4 py-3 border border-brand-cream-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold text-sm font-mono bg-white text-brand-brown disabled:bg-brand-cream/50"
+                      className="flex-1 px-4 py-3 border border-luxe-border text-[13px] font-mono bg-white text-luxe-text disabled:bg-luxe-surface/50 placeholder:text-luxe-muted"
                     />
                     <button
                       onClick={handleApplyCoupon}
                       disabled={couponApplied || !couponCode}
-                      className="px-6 py-3 bg-brand-gold text-white rounded-xl font-semibold hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
+                      className="px-6 py-3 bg-luxe-gold text-white text-[11px] uppercase tracking-[0.15em] hover:bg-luxe-gold-light transition-colors duration-200 disabled:opacity-50"
+                      style={{ fontWeight: 500 }}
                     >
                       {couponApplied ? "Applied" : "Apply"}
                     </button>
                   </div>
-                  <p className="text-xs text-brand-brown-light/50 mt-1">Try code: RICHY10</p>
+                  <p className="text-[10px] text-luxe-muted mt-1">Try code: RICHY10</p>
                 </div>
 
                 <button
                   onClick={handlePayment}
                   disabled={loading}
-                  className="w-full py-4 bg-brand-brown text-brand-cream-light rounded-xl font-semibold text-lg hover:bg-brand-gold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-[#1A1A1A] text-white text-[11px] uppercase tracking-[0.2em] hover:bg-[#333] transition-colors duration-200 disabled:opacity-50 flex items-center justify-center gap-2"
+                  style={{ fontWeight: 500 }}
                 >
-                  <Lock className="w-5 h-5" />
+                  <Lock className="w-4 h-4" />
                   {loading ? "Processing..." : `Pay ₹${total.toFixed(0)}`}
                 </button>
               </div>
@@ -378,36 +408,38 @@ export default function CheckoutPage() {
 
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-2">
-            <div className="bg-brand-cream-light rounded-2xl p-6 border border-brand-cream-dark sticky top-24">
-              <h3 className="font-playfair font-bold text-brand-brown mb-4">Order Summary</h3>
+            <div className="bg-white p-6 border border-luxe-border sticky top-[130px]">
+              <h3 className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-4" style={{ fontWeight: 600 }}>
+                Order Summary
+              </h3>
               <div className="space-y-3 mb-4 max-h-48 overflow-y-auto">
                 {items.map((item) => (
-                  <div key={`${item.product._id}-${item.size}`} className="flex justify-between text-sm">
-                    <span className="text-brand-brown-light/60 truncate flex-1 mr-2">
+                  <div key={`${item.product._id}-${item.size}`} className="flex justify-between text-[12px]">
+                    <span className="text-luxe-text-secondary truncate flex-1 mr-2" style={{ fontWeight: 300 }}>
                       {item.product.name} &times; {item.quantity}
                     </span>
-                    <span className="font-medium text-brand-brown">₹{(item.product.price * item.quantity).toFixed(0)}</span>
+                    <span className="text-luxe-text" style={{ fontWeight: 500 }}>&#8377;{(item.product.price * item.quantity).toFixed(0)}</span>
                   </div>
                 ))}
               </div>
-              <div className="border-t border-brand-cream-dark pt-4 space-y-2">
-                <div className="flex justify-between text-sm text-brand-brown-light/60">
+              <div className="border-t border-luxe-border pt-4 space-y-2">
+                <div className="flex justify-between text-[12px] text-luxe-muted">
                   <span>Subtotal</span>
-                  <span>₹{sub.toFixed(0)}</span>
+                  <span>&#8377;{sub.toFixed(0)}</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-sm text-green-700">
+                  <div className="flex justify-between text-[12px] text-green-700">
                     <span>Coupon Discount</span>
-                    <span>-₹{discount.toFixed(0)}</span>
+                    <span>-&#8377;{discount.toFixed(0)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-sm text-brand-brown-light/60">
+                <div className="flex justify-between text-[12px] text-luxe-muted">
                   <span>Shipping</span>
                   <span>{shipping === 0 ? "FREE" : `₹${shipping}`}</span>
                 </div>
-                <div className="flex justify-between font-bold text-brand-brown pt-2 border-t border-brand-cream-dark">
-                  <span>Total</span>
-                  <span>₹{total.toFixed(0)}</span>
+                <div className="flex justify-between text-luxe-text pt-2 border-t border-luxe-border">
+                  <span className="text-[13px]" style={{ fontWeight: 600 }}>Total</span>
+                  <span className="text-[16px]" style={{ fontWeight: 500 }}>&#8377;{total.toFixed(0)}</span>
                 </div>
               </div>
             </div>

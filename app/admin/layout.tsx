@@ -30,16 +30,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="flex h-screen bg-brand-cream">
+    <div className="flex h-screen bg-luxe-bg">
       {/* Sidebar */}
-      <aside className="w-64 bg-brand-brown text-white flex flex-col fixed h-full">
+      <aside className="w-64 bg-[#1A1A1A] text-white flex flex-col fixed h-full">
         {/* Logo */}
         <div className="p-6 border-b border-white/10">
-          <Link href="/" className="text-2xl font-playfair font-bold">
-            <span className="text-white">Richy</span>
-            <span className="text-brand-gold">Sox</span>
+          <Link href="/" className="flex items-center gap-0">
+            <span className="font-playfair text-[22px] tracking-[0.08em] text-white" style={{ fontWeight: 400 }}>
+              RichySox
+            </span>
+            <span className="text-luxe-gold text-[22px] ml-0.5">.</span>
           </Link>
-          <p className="text-xs text-gray-500 mt-1">Admin Panel</p>
+          <p className="text-[9px] uppercase tracking-[0.2em] text-white/40 mt-1" style={{ fontWeight: 500 }}>
+            Admin Panel
+          </p>
         </div>
 
         {/* Nav */}
@@ -48,39 +52,42 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              className={`flex items-center gap-3 px-4 py-3 text-[11px] uppercase tracking-[0.12em] transition-all duration-200 ${
                 pathname === href
-                  ? "bg-brand-gold text-brand-brown"
-                  : "text-gray-400 hover:bg-white/10 hover:text-white"
+                  ? "bg-luxe-gold text-[#1A1A1A]"
+                  : "text-white/50 hover:bg-white/5 hover:text-white"
               }`}
+              style={{ fontWeight: 500 }}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-[18px] h-[18px]" />
               {label}
             </Link>
           ))}
         </nav>
 
         {/* Bottom */}
-        <div className="p-4 border-t border-white/10 space-y-2">
+        <div className="p-4 border-t border-white/10 space-y-1">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-gray-400 hover:bg-white/10 hover:text-white transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-[11px] uppercase tracking-[0.12em] text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200"
+            style={{ fontWeight: 500 }}
           >
             <ExternalLink className="w-4 h-4" />
             View Store
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all"
+            className="w-full flex items-center gap-3 px-4 py-3 text-[11px] uppercase tracking-[0.12em] text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-200"
+            style={{ fontWeight: 500 }}
           >
             <LogOut className="w-4 h-4" />
             Logout
           </button>
           {user && (
             <div className="px-4 py-2">
-              <p className="text-xs font-medium text-white">{user.name || "Admin"}</p>
-              <p className="text-xs text-gray-500">{user.mobile}</p>
+              <p className="text-[11px] text-white" style={{ fontWeight: 500 }}>{user.name || "Admin"}</p>
+              <p className="text-[10px] text-white/40">{user.mobile}</p>
             </div>
           )}
         </div>
