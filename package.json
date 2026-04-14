@@ -24,6 +24,8 @@
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "firebase": "^12.12.0",
+    "firebase-admin": "^13.8.0",
     "framer-motion": "^11.2.12",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.395.0",
