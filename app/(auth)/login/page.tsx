@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/authStore";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "@/lib/firebase";
-import type { ConfirmationResult } from "@/lib/firebase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,111 +16,30 @@ export default function LoginPage() {
   const [name, setName] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [useFirebase, setUseFirebase] = useState(true);
-
-  const confirmationRef = useRef<ConfirmationResult | null>(null);
-  const recaptchaRef = useRef<RecaptchaVerifier | null>(null);
-  const recaptchaContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Check if Firebase is configured
-    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
-      setUseFirebase(false);
-    }
-  }, []);
+  const [devOtp, setDevOtp] = useState<string | null>(null);
 
   if (isLoggedIn()) {
     router.push("/");
     return null;
   }
 
-  const setupRecaptcha = () => {
-    if (recaptchaRef.current) return;
-    recaptchaRef.current = new RecaptchaVerifier(auth, "recaptcha-container", {
-      size: "invisible",
-      callback: () => {},
-    });
-  };
-
-  // ── Firebase OTP Flow ──
-  const handleFirebaseSendOtp = async () => {
+  const handleSendOtp = async () => {
     if (!mobile || mobile.length !== 10) {
       toast.error("Enter a valid 10-digit mobile number");
       return;
     }
     setLoading(true);
     try {
-      setupRecaptcha();
-      const phoneNumber = `+91${mobile}`;
-      const result = await signInWithPhoneNumber(auth, phoneNumber, recaptchaRef.current!);
-      confirmationRef.current = result;
+      const { data } = await axios.post("/api/auth/send-otp", { mobile });
       setOtpSent(true);
-      toast.success("OTP sent to +91 " + mobile);
-    } catch (error: unknown) {
-      console.error("Firebase send OTP error:", error);
-      const msg = error instanceof Error ? error.message : "Failed to send OTP";
-      if (msg.includes("too-many-requests")) {
-        toast.error("Too many attempts. Please try again later.");
-      } else if (msg.includes("invalid-phone-number")) {
-        toast.error("Invalid phone number format");
-      } else {
-        toast.error("Failed to send OTP. Check console for details.");
-      }
-      // Reset recaptcha on error
-      recaptchaRef.current = null;
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const handleFirebaseVerifyOtp = async () => {
-    if (!otp || otp.length !== 6) {
-      toast.error("Enter the 6-digit OTP");
-      return;
-    }
-    if (!confirmationRef.current) {
-      toast.error("Session expired. Please resend OTP.");
-      setOtpSent(false);
-      return;
-    }
-    setLoading(true);
-    try {
-      const credential = await confirmationRef.current.confirm(otp);
-      const idToken = await credential.user.getIdToken();
-
-      // Send Firebase token to our backend
-      const { data } = await axios.post("/api/auth/firebase-verify", { idToken, name });
-      setAuth(data.data.user, data.data.token);
-      toast.success("Welcome to RichySox!");
-      if (data.data.user.role === "admin") {
-        router.push("/admin/dashboard");
+      // If dev mode, show OTP in a popup
+      if (data.data?.devOtp) {
+        setDevOtp(data.data.devOtp);
+        toast.success(`OTP: ${data.data.devOtp}`, { duration: 15000 });
       } else {
-        router.push("/");
+        toast.success("OTP sent to +91 " + mobile);
       }
-    } catch (error: unknown) {
-      console.error("Verify error:", error);
-      const msg = error instanceof Error ? error.message : "";
-      if (msg.includes("invalid-verification-code")) {
-        toast.error("Invalid OTP. Please try again.");
-      } else {
-        toast.error("Verification failed. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ── Fallback: Original MSG91/Dev Console Flow ──
-  const handleLegacySendOtp = async () => {
-    if (!mobile || mobile.length !== 10) {
-      toast.error("Enter a valid 10-digit mobile number");
-      return;
-    }
-    setLoading(true);
-    try {
-      await axios.post("/api/auth/send-otp", { mobile });
-      setOtpSent(true);
-      toast.success("OTP sent!");
     } catch {
       toast.error("Failed to send OTP");
     } finally {
@@ -130,7 +47,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleLegacyVerifyOtp = async () => {
+  const handleVerifyOtp = async () => {
     if (!otp || otp.length !== 6) {
       toast.error("Enter valid OTP");
       return;
@@ -152,15 +69,10 @@ export default function LoginPage() {
     }
   };
 
-  // Choose which flow to use
-  const handleSendOtp = useFirebase ? handleFirebaseSendOtp : handleLegacySendOtp;
-  const handleVerifyOtp = useFirebase ? handleFirebaseVerifyOtp : handleLegacyVerifyOtp;
-
   const handleResend = () => {
     setOtpSent(false);
     setOtp("");
-    confirmationRef.current = null;
-    recaptchaRef.current = null;
+    setDevOtp(null);
   };
 
   return (
@@ -222,6 +134,19 @@ export default function LoginPage() {
               </button>
             ) : (
               <>
+                {/* Dev OTP popup banner */}
+                {devOtp && (
+                  <div className="bg-[#FDF9EF] border border-[#C9A84C] p-4 text-center">
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-luxe-gold mb-1" style={{ fontWeight: 600 }}>
+                      Development Mode
+                    </p>
+                    <p className="text-[28px] text-luxe-text tracking-[0.3em] font-mono" style={{ fontWeight: 600 }}>
+                      {devOtp}
+                    </p>
+                    <p className="text-[10px] text-luxe-muted mt-1">Enter this OTP below to login</p>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
                     OTP
@@ -265,13 +190,6 @@ export default function LoginPage() {
               </>
             )}
           </div>
-
-          {/* Auth mode indicator */}
-          <div className="mt-4 pt-4 border-t border-luxe-border">
-            <p className="text-[9px] text-luxe-muted text-center uppercase tracking-[0.15em]">
-              {useFirebase ? "Secured by Firebase" : "Dev Mode — OTP in server console"}
-            </p>
-          </div>
         </div>
 
         <p className="text-center text-[10px] text-luxe-muted mt-6">
@@ -281,9 +199,6 @@ export default function LoginPage() {
           <Link href="/shipping-policy" className="text-luxe-gold hover:text-luxe-text transition-colors duration-200 border-b border-luxe-gold">Privacy Policy</Link>
         </p>
       </div>
-
-      {/* Invisible reCAPTCHA container for Firebase */}
-      <div id="recaptcha-container" ref={recaptchaContainerRef} />
     </div>
   );
 }

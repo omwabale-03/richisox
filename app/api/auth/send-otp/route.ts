@@ -16,7 +16,12 @@ export async function POST(req: NextRequest) {
     storeOTP(mobile, otp);
     await sendOTP(mobile, otp);
 
-    return ok(null, "OTP sent successfully");
+    // In dev mode (no MSG91 key), return OTP in response so frontend can show it
+    const isDev = !process.env.MSG91_AUTH_KEY;
+    return ok(
+      isDev ? { devOtp: otp } : null,
+      "OTP sent successfully"
+    );
   } catch (error) {
     console.error("Send OTP error:", error);
     return err("Failed to send OTP");

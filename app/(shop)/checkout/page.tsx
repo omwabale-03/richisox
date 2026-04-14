@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Phone, MapPin, CreditCard, Lock } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "@/lib/firebase";
-import type { ConfirmationResult } from "@/lib/firebase";
 
 const SHIPPING_THRESHOLD = 499;
 const SHIPPING_FEE = 49;
@@ -32,11 +30,7 @@ export default function CheckoutPage() {
   const [name, setName] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // Firebase refs
-  const confirmationRef = useRef<ConfirmationResult | null>(null);
-  const recaptchaRef = useRef<RecaptchaVerifier | null>(null);
-  const useFirebase = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+  const [devOtp, setDevOtp] = useState<string | null>(null);
 
   // Step 2 state
   const [address, setAddress] = useState({
@@ -57,11 +51,6 @@ export default function CheckoutPage() {
   const shipping = sub >= SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
   const total = sub + shipping - discount;
 
-  const setupRecaptcha = () => {
-    if (recaptchaRef.current) return;
-    recaptchaRef.current = new RecaptchaVerifier(auth, "checkout-recaptcha", { size: "invisible", callback: () => {} });
-  };
-
   const handleSendOtp = async () => {
     if (!mobile || mobile.length !== 10) {
       toast.error("Enter a valid 10-digit mobile number");
@@ -69,18 +58,16 @@ export default function CheckoutPage() {
     }
     setLoading(true);
     try {
-      if (useFirebase) {
-        setupRecaptcha();
-        const result = await signInWithPhoneNumber(auth, `+91${mobile}`, recaptchaRef.current!);
-        confirmationRef.current = result;
-      } else {
-        await axios.post("/api/auth/send-otp", { mobile });
-      }
+      const { data } = await axios.post("/api/auth/send-otp", { mobile });
       setOtpSent(true);
-      toast.success("OTP sent to +91 " + mobile);
+      if (data.data?.devOtp) {
+        setDevOtp(data.data.devOtp);
+        toast.success(`OTP: ${data.data.devOtp}`, { duration: 15000 });
+      } else {
+        toast.success("OTP sent to +91 " + mobile);
+      }
     } catch {
       toast.error("Failed to send OTP");
-      recaptchaRef.current = null;
     } finally {
       setLoading(false);
     }
@@ -93,15 +80,8 @@ export default function CheckoutPage() {
     }
     setLoading(true);
     try {
-      if (useFirebase && confirmationRef.current) {
-        const credential = await confirmationRef.current.confirm(otp);
-        const idToken = await credential.user.getIdToken();
-        const { data } = await axios.post("/api/auth/firebase-verify", { idToken, name });
-        setAuth(data.data.user, data.data.token);
-      } else {
-        const { data } = await axios.post("/api/auth/verify-otp", { mobile, otp, name });
-        setAuth(data.data.user, data.data.token);
-      }
+      const { data } = await axios.post("/api/auth/verify-otp", { mobile, otp, name });
+      setAuth(data.data.user, data.data.token);
       toast.success("Welcome to RichySox!");
       setStep(2);
     } catch {
@@ -288,6 +268,12 @@ export default function CheckoutPage() {
                     </button>
                   ) : (
                     <>
+                      {devOtp && (
+                        <div className="bg-[#FDF9EF] border border-[#C9A84C] p-3 text-center">
+                          <p className="text-[9px] uppercase tracking-[0.15em] text-luxe-gold mb-1" style={{ fontWeight: 600 }}>Dev Mode OTP</p>
+                          <p className="text-[24px] text-luxe-text tracking-[0.3em] font-mono" style={{ fontWeight: 600 }}>{devOtp}</p>
+                        </div>
+                      )}
                       <div>
                         <label className="block text-[10px] uppercase tracking-[0.15em] text-luxe-text mb-1.5" style={{ fontWeight: 600 }}>
                           Enter OTP
@@ -472,7 +458,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
-      <div id="checkout-recaptcha" />
     </div>
   );
 }
