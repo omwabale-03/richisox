@@ -21,7 +21,7 @@ const DEMO_ORDERS: IOrder[] = [
   {
     _id: "order1",
     orderId: "RS-20240601-0001",
-    user: { _id: "u1", name: "Om Wabale", mobile: "9876543210", role: "customer", createdAt: "", updatedAt: "" },
+    user: { _id: "u1", name: "Om Wabale", mobile: "9876543210", role: "customer", loyaltyPoints: 0, createdAt: "", updatedAt: "" },
     items: [
       { productId: "1", name: "Luxury Crew Socks", image: "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=80&h=80&fit=crop", price: 299, quantity: 2, size: "M", color: "Black" },
     ],
@@ -39,7 +39,7 @@ const DEMO_ORDERS: IOrder[] = [
   {
     _id: "order2",
     orderId: "RS-20240611-0002",
-    user: { _id: "u1", name: "Om Wabale", mobile: "9876543210", role: "customer", createdAt: "", updatedAt: "" },
+    user: { _id: "u1", name: "Om Wabale", mobile: "9876543210", role: "customer", loyaltyPoints: 0, createdAt: "", updatedAt: "" },
     items: [
       { productId: "2", name: "Sports Performance Socks", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop", price: 199, quantity: 3, size: "L", color: "White" },
     ],

@@ -1,12 +1,77 @@
+// ── Product ──────────────────────────────────────────────────────────────────
+
+export interface IProductColor {
+  name: string;
+  hex: string;
+  imageUrl?: string;
+}
+
+export interface IPackOption {
+  label: string;   // "Single", "Pack of 3", "Pack of 5", "Pack of 9"
+  size: number;     // 1, 3, 5, 9
+  price: number;    // price for that pack
+}
+
+export interface IReview {
+  user: string;
+  rating: number;
+  comment: string;
+  date: string;
+  verified: boolean;
+}
+
+export type SockType = "ankle" | "crew" | "no-show" | "knee-high" | "quarter" | "over-the-calf";
+export type Material = "cotton" | "bamboo" | "wool" | "modal" | "merino" | "cashmere" | "polyester" | "silk-blend";
+export type Occasion = "casual" | "formal" | "sports" | "office" | "festive" | "travel";
+export type Category = "men" | "women" | "kids" | "unisex";
+
+export interface IProduct {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  mrp?: number;               // original price (MRP) for strikethrough
+  comparePrice?: number;       // backward compat alias for mrp
+  discount?: number;           // percentage discount
+  category: Category;
+  type: string;                // legacy field, kept for compat
+  sockType: SockType;
+  material: Material;
+  occasion: Occasion[];
+  technologies: string[];      // e.g. "Silver Frost Anti-Odour", "Moisture Wicking"
+  packOptions: IPackOption[];
+  sizes: string[];
+  colors: IProductColor[];
+  images: string[];
+  stock: number;
+  sku: string;
+  tags: string[];
+  isActive: boolean;
+  isFeatured: boolean;
+  isNew: boolean;
+  isTrending: boolean;
+  rating: number;
+  reviewCount: number;
+  reviews: IReview[];
+  materialCare?: string;       // washing/care instructions rich text
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── User ─────────────────────────────────────────────────────────────────────
+
 export interface IUser {
   _id: string;
   name: string;
   mobile: string;
   email?: string;
   role: "customer" | "admin";
+  loyaltyPoints: number;
   createdAt: string;
   updatedAt: string;
 }
+
+// ── Address ──────────────────────────────────────────────────────────────────
 
 export interface IAddress {
   _id: string;
@@ -21,38 +86,21 @@ export interface IAddress {
   isDefault: boolean;
 }
 
-export interface IProductColor {
-  name: string;
-  hex: string;
-}
-
-export interface IProduct {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  comparePrice?: number;
-  category: "men" | "women" | "kids";
-  type: "casual" | "sports" | "formal" | "ankle" | "crew";
-  sizes: string[];
-  colors: IProductColor[];
-  images: string[];
-  stock: number;
-  sku: string;
-  tags: string[];
-  isActive: boolean;
-  isFeatured: boolean;
-  rating: number;
-  reviewCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
+// ── Cart ─────────────────────────────────────────────────────────────────────
 
 export interface ICartItem {
   product: IProduct;
   quantity: number;
   size: string;
   color: string;
+  packSize?: number;          // 1, 3, 5, 9
+  packPrice?: number;         // price for chosen pack
+  giftBox?: {
+    items: string[];          // product IDs in the gift box
+    message: string;
+    packaging: string;
+    packagingPrice: number;
+  };
 }
 
 export interface ICart {
@@ -60,6 +108,8 @@ export interface ICart {
   subtotal: number;
   itemCount: number;
 }
+
+// ── Order ────────────────────────────────────────────────────────────────────
 
 export interface IOrderItem {
   productId: string;
@@ -69,6 +119,7 @@ export interface IOrderItem {
   quantity: number;
   size: string;
   color: string;
+  packSize?: number;
 }
 
 export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
@@ -93,9 +144,13 @@ export interface IOrder {
   shiprocketOrderId?: string;
   trackingNumber?: string;
   courier?: string;
+  loyaltyPointsEarned?: number;
+  loyaltyPointsRedeemed?: number;
   createdAt: string;
   updatedAt: string;
 }
+
+// ── Coupon ────────────────────────────────────────────────────────────────────
 
 export interface ICoupon {
   _id: string;
@@ -109,6 +164,8 @@ export interface ICoupon {
   isActive: boolean;
   expiresAt: string;
 }
+
+// ── API ──────────────────────────────────────────────────────────────────────
 
 export interface ApiResponse<T = unknown> {
   success: boolean;

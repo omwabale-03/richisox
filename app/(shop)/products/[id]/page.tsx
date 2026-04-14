@@ -1,45 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ShoppingBag, Zap, Truck, RotateCcw, Shield, ChevronRight, Minus, Plus } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import toast from "react-hot-toast";
-import { IProduct } from "@/types";
+import { getProductById, getRelatedProducts, DEMO_PRODUCTS } from "@/lib/demo-products";
+import { IProductColor, IPackOption } from "@/types";
 
-const DEMO_PRODUCT: IProduct = {
-  _id: "1",
-  name: "Luxury Crew Socks",
-  description:
-    "Experience the pinnacle of comfort with our Luxury Crew Socks. Made from 100% premium combed cotton, these socks feature reinforced heel and toe for extra durability. The mid-calf length provides excellent coverage while the elastic arch support keeps them perfectly in place all day.",
-  price: 299,
-  comparePrice: 499,
-  category: "men",
-  type: "crew",
-  sizes: ["S", "M", "L", "XL"],
-  colors: [
-    { name: "Midnight Black", hex: "#000000" },
-    { name: "Navy Blue", hex: "#1a237e" },
-    { name: "Charcoal", hex: "#424242" },
-    { name: "Gold", hex: "#A8874A" },
-  ],
-  images: [
-    "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=600&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=600&h=600&fit=crop",
-  ],
-  stock: 50,
-  sku: "RS-001",
-  tags: ["premium", "crew", "cotton"],
-  isActive: true,
-  isFeatured: true,
-  rating: 4.8,
-  reviewCount: 124,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
+import { ImageGallery } from "@/components/product/ImageGallery";
+import { PackSelector } from "@/components/product/PackSelector";
+import { SizeSelector } from "@/components/product/SizeSelector";
+import { ColourSwatches } from "@/components/product/ColourSwatches";
+import { TechBadges } from "@/components/product/TechBadges";
+import { PincodeChecker } from "@/components/product/PincodeChecker";
+import { ProductTabs } from "@/components/product/ProductTabs";
+import { RelatedProducts } from "@/components/product/RelatedProducts";
 
 const perks = [
   { icon: Truck, label: "Free Shipping ₹499+" },
@@ -52,16 +29,35 @@ export default function ProductDetailPage() {
   const { id } = useParams();
   const addItem = useCartStore((s) => s.addItem);
 
-  const product = DEMO_PRODUCT;
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
+  const product = getProductById(id as string) || DEMO_PRODUCTS[0];
+  const relatedProducts = getRelatedProducts(product);
+
+  const [selectedColor, setSelectedColor] = useState<IProductColor>(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState(product.sizes[1] || product.sizes[0]);
+  const [selectedPack, setSelectedPack] = useState<IPackOption>(
+    product.packOptions?.[0] || { label: "Single", size: 1, price: product.price }
+  );
   const [quantity, setQuantity] = useState(1);
-  const [activeImage, setActiveImage] = useState(0);
+
+  // Track recently viewed
+  useEffect(() => {
+    try {
+      const key = "richysox-recently-viewed";
+      const stored = JSON.parse(localStorage.getItem(key) || "[]") as string[];
+      const updated = [product._id, ...stored.filter((pid: string) => pid !== product._id)].slice(0, 10);
+      localStorage.setItem(key, JSON.stringify(updated));
+    } catch {}
+  }, [product._id]);
+
+  const displayPrice = selectedPack.price;
+  const mrp = product.mrp || product.comparePrice;
+  const mrpForPack = mrp ? mrp * selectedPack.size : undefined;
+  const discount = mrpForPack && mrpForPack > displayPrice
+    ? Math.round(((mrpForPack - displayPrice) / mrpForPack) * 100)
+    : product.discount || 0;
 
   const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addItem(product, selectedSize, selectedColor.name);
-    }
+    addItem(product, selectedSize, selectedColor.name, quantity);
     toast.success("Added to cart!");
   };
 
@@ -70,10 +66,6 @@ export default function ProductDetailPage() {
     window.location.href = "/checkout";
   };
 
-  const discount = product.comparePrice
-    ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)
-    : 0;
-
   return (
     <div className="min-h-screen bg-luxe-bg">
       <div className="max-w-[1400px] mx-auto px-[4%] py-10">
@@ -81,48 +73,32 @@ export default function ProductDetailPage() {
         <nav className="flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-luxe-muted mb-8" style={{ fontWeight: 500 }}>
           <Link href="/" className="hover:text-luxe-text transition-colors duration-200">Home</Link>
           <ChevronRight className="w-3 h-3" />
-          <Link href="/products" className="hover:text-luxe-text transition-colors duration-200">Products</Link>
+          <Link href="/products" className="hover:text-luxe-text transition-colors duration-200">Shop</Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-luxe-text">{product.name}</span>
+          <Link href={`/products?category=${product.category}`} className="hover:text-luxe-text transition-colors duration-200 capitalize">{product.category}</Link>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-luxe-text truncate max-w-[200px]">{product.name}</span>
         </nav>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Images */}
-          <div>
-            <div className="relative h-96 lg:h-[500px] bg-luxe-image-bg overflow-hidden mb-4 border border-luxe-border">
-              <Image
-                src={product.images[activeImage]}
-                alt={product.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="flex gap-3">
-              {product.images.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveImage(i)}
-                  className={`relative w-20 h-20 overflow-hidden border-2 transition-all duration-200 ${
-                    activeImage === i ? "border-luxe-text" : "border-luxe-border"
-                  }`}
-                >
-                  <Image src={img} alt="" fill className="object-cover" />
-                </button>
-              ))}
-            </div>
-          </div>
+          {/* Image Gallery */}
+          <ImageGallery images={product.images} productName={product.name} />
 
-          {/* Info */}
+          {/* Product Info */}
           <div>
-            <p className="text-[9px] uppercase tracking-[0.25em] text-luxe-gold mb-3" style={{ fontWeight: 500 }}>
-              {product.category} &middot; {product.type}
+            {/* Brand */}
+            <p className="text-[9px] uppercase tracking-[0.25em] text-luxe-gold mb-2" style={{ fontWeight: 500 }}>
+              RichySox
             </p>
-            <h1 className="font-playfair text-luxe-text mb-3" style={{ fontWeight: 400, fontSize: "clamp(28px, 3vw, 38px)" }}>
+
+            {/* Name */}
+            <h1 className="font-playfair text-luxe-text mb-3" style={{ fontWeight: 400, fontSize: "clamp(24px, 2.5vw, 34px)" }}>
               {product.name}
             </h1>
 
+            {/* Rating */}
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-0.5">
                 {[...Array(5)].map((_, i) => (
                   <div
                     key={i}
@@ -135,15 +111,19 @@ export default function ProductDetailPage() {
                 ))}
               </div>
               <span className="text-[12px] text-luxe-muted">{product.rating} ({product.reviewCount} reviews)</span>
+              <span className="text-[10px] text-luxe-gold border-b border-luxe-gold/40 cursor-pointer hover:border-luxe-gold transition-colors duration-200" style={{ fontWeight: 500 }}>
+                Write a Review
+              </span>
             </div>
 
+            {/* Price */}
             <div className="flex items-center gap-3 mb-6">
               <span className="text-[28px] text-luxe-text" style={{ fontWeight: 500 }}>
-                &#8377;{product.price}
+                &#8377;{displayPrice}
               </span>
-              {product.comparePrice && (
+              {mrpForPack && mrpForPack > displayPrice && (
                 <>
-                  <span className="text-[18px] text-luxe-muted line-through">&#8377;{product.comparePrice}</span>
+                  <span className="text-[16px] text-luxe-muted line-through">&#8377;{mrpForPack}</span>
                   <span className="text-[13px] text-luxe-sale" style={{ fontWeight: 500 }}>
                     {discount}% off
                   </span>
@@ -151,55 +131,34 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            <p className="text-body-base text-luxe-text-secondary mb-6" style={{ fontWeight: 300, lineHeight: 1.85 }}>
+            {/* Technology Badges */}
+            <TechBadges technologies={product.technologies} />
+
+            {/* Description */}
+            <p className="text-body-sm text-luxe-text-secondary mb-6" style={{ fontWeight: 300, lineHeight: 1.85 }}>
               {product.description}
             </p>
 
-            {/* Color Picker */}
-            <div className="mb-6">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-3" style={{ fontWeight: 600 }}>
-                Color: <span className="text-luxe-muted" style={{ fontWeight: 400 }}>{selectedColor.name}</span>
-              </p>
-              <div className="flex gap-3">
-                {product.colors.map((color) => (
-                  <button
-                    key={color.hex}
-                    onClick={() => setSelectedColor(color)}
-                    className="w-[14px] h-[14px] rounded-full border border-luxe-border transition-all duration-200"
-                    style={{
-                      backgroundColor: color.hex,
-                      boxShadow: selectedColor.hex === color.hex
-                        ? "0 0 0 2px white, 0 0 0 3px #1A1A1A"
-                        : "none",
-                    }}
-                    title={color.name}
-                  />
-                ))}
-              </div>
-            </div>
+            {/* Pack Selector */}
+            <PackSelector
+              packOptions={product.packOptions}
+              selectedPack={selectedPack}
+              onPackChange={setSelectedPack}
+            />
 
-            {/* Size Picker */}
-            <div className="mb-6">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-luxe-text mb-3" style={{ fontWeight: 600 }}>
-                Size
-              </p>
-              <div className="flex gap-0">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-5 py-2.5 text-[11px] uppercase tracking-[0.12em] border border-luxe-border -ml-px first:ml-0 transition-colors duration-200 ${
-                      selectedSize === size
-                        ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                        : "bg-white text-luxe-text-secondary hover:text-luxe-text"
-                    }`}
-                    style={{ fontWeight: 500 }}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* Colour Swatches */}
+            <ColourSwatches
+              colors={product.colors}
+              selectedColor={selectedColor}
+              onColorChange={setSelectedColor}
+            />
+
+            {/* Size Selector with Size Guide */}
+            <SizeSelector
+              sizes={product.sizes}
+              selectedSize={selectedSize}
+              onSizeChange={setSelectedSize}
+            />
 
             {/* Quantity */}
             <div className="flex items-center gap-4 mb-6">
@@ -223,8 +182,8 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Buttons */}
-            <div className="flex gap-4 mb-8">
+            {/* Action Buttons */}
+            <div className="flex gap-4 mb-6">
               <button
                 onClick={handleAddToCart}
                 className="flex-1 flex items-center justify-center gap-2 py-4 border border-luxe-border-emphasis text-luxe-text text-[11px] uppercase tracking-[0.2em] hover:border-luxe-text transition-colors duration-200"
@@ -243,7 +202,10 @@ export default function ProductDetailPage() {
               </button>
             </div>
 
-            {/* Perks */}
+            {/* Pincode Checker */}
+            <PincodeChecker />
+
+            {/* Trust Perks */}
             <div className="grid grid-cols-2 gap-4 pt-6 border-t border-luxe-border">
               {perks.map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-2.5">
@@ -256,6 +218,12 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </div>
+
+        {/* Product Tabs */}
+        <ProductTabs product={product} />
+
+        {/* Related Products */}
+        <RelatedProducts products={relatedProducts} />
       </div>
     </div>
   );

@@ -5,27 +5,11 @@ import Image from "next/image";
 import { Search, Plus, Edit, Trash2, X, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import { IProduct } from "@/types";
-
-const DEMO_PRODUCTS: IProduct[] = [
-  {
-    _id: "1", name: "Luxury Crew Socks", description: "Premium cotton crew socks.", price: 299, comparePrice: 499,
-    category: "men", type: "crew", sizes: ["S", "M", "L", "XL"], colors: [{ name: "Black", hex: "#000000" }],
-    images: ["https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=80&h=80&fit=crop"],
-    stock: 50, sku: "RS-001", tags: ["premium"], isActive: true, isFeatured: true, rating: 4.8, reviewCount: 124,
-    createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
-  },
-  {
-    _id: "2", name: "Sports Ankle Socks", description: "Performance sports socks.", price: 199,
-    category: "men", type: "sports", sizes: ["M", "L"], colors: [{ name: "White", hex: "#ffffff" }],
-    images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop"],
-    stock: 8, sku: "RS-002", tags: ["sports"], isActive: true, isFeatured: false, rating: 4.5, reviewCount: 89,
-    createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
-  },
-];
+import { DEMO_PRODUCTS } from "@/lib/demo-products";
 
 type ProductForm = {
   name: string; description: string; price: number; comparePrice: number;
-  category: IProduct["category"]; type: IProduct["type"];
+  category: string; type: string;
   sizes: string; colors: string; images: string; stock: number; sku: string; tags: string;
   isActive: boolean; isFeatured: boolean;
 };
@@ -36,13 +20,13 @@ const emptyProduct: ProductForm = {
 };
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState(DEMO_PRODUCTS);
+  const [products, setProducts] = useState<IProduct[]>(DEMO_PRODUCTS);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState<IProduct | null>(null);
   const [form, setForm] = useState<ProductForm>(emptyProduct);
 
-  const filtered = products.filter((p) =>
+  const filtered = products.filter((p: IProduct) =>
     p.name.toLowerCase().includes(search.toLowerCase()) || p.sku.includes(search)
   );
 
@@ -64,35 +48,46 @@ export default function AdminProductsPage() {
   };
 
   const handleSave = () => {
+    const base = editProduct || DEMO_PRODUCTS[0];
     const product: IProduct = {
+      ...base,
       _id: editProduct?._id || Date.now().toString(),
-      name: form.name, description: form.description, price: form.price, comparePrice: form.comparePrice || undefined,
-      category: form.category, type: form.type,
-      sizes: form.sizes.split(",").map((s) => s.trim()),
-      colors: form.colors.split(",").map((c) => {
+      name: form.name,
+      description: form.description,
+      price: form.price,
+      comparePrice: form.comparePrice || undefined,
+      mrp: form.comparePrice || undefined,
+      category: form.category as IProduct["category"],
+      type: form.type,
+      sizes: form.sizes.split(",").map((s: string) => s.trim()),
+      colors: form.colors.split(",").map((c: string) => {
         const [name, hex] = c.split(":");
         return { name: name?.trim() || "", hex: hex?.trim() || "#000000" };
       }),
-      images: form.images.split(",").map((i) => i.trim()),
-      stock: form.stock, sku: form.sku, tags: form.tags.split(",").map((t) => t.trim()),
-      isActive: form.isActive, isFeatured: form.isFeatured, rating: editProduct?.rating || 4.5,
+      images: form.images.split(",").map((i: string) => i.trim()),
+      stock: form.stock,
+      sku: form.sku,
+      tags: form.tags.split(",").map((t: string) => t.trim()),
+      isActive: form.isActive,
+      isFeatured: form.isFeatured,
+      rating: editProduct?.rating || 4.5,
       reviewCount: editProduct?.reviewCount || 0,
       createdAt: editProduct?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     if (editProduct) {
-      setProducts((prev) => prev.map((p) => (p._id === editProduct._id ? product : p)));
+      setProducts((prev: IProduct[]) => prev.map((p: IProduct) => (p._id === editProduct._id ? product : p)));
       toast.success("Product updated!");
     } else {
-      setProducts((prev) => [product, ...prev]);
+      setProducts((prev: IProduct[]) => [product, ...prev]);
       toast.success("Product created!");
     }
     setShowModal(false);
   };
 
   const handleDelete = (id: string) => {
-    setProducts((prev) => prev.map((p) => p._id === id ? { ...p, isActive: false } : p));
+    setProducts((prev: IProduct[]) => prev.map((p: IProduct) => p._id === id ? { ...p, isActive: false } : p));
     toast.success("Product deactivated");
   };
 
@@ -102,7 +97,7 @@ export default function AdminProductsPage() {
         <div>
           <p className="eyebrow mb-2">Manage</p>
           <h1 className="font-playfair text-luxe-text" style={{ fontWeight: 400, fontSize: "28px" }}>Products</h1>
-          <p className="text-[12px] text-luxe-muted mt-1">{products.filter((p) => p.isActive).length} active products</p>
+          <p className="text-[12px] text-luxe-muted mt-1">{products.filter((p: IProduct) => p.isActive).length} active products</p>
         </div>
         <button
           onClick={openCreate}

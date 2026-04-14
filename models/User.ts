@@ -5,6 +5,7 @@ export interface IUserDocument extends Document {
   mobile: string;
   email?: string;
   role: "customer" | "admin";
+  loyaltyPoints: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,6 +16,7 @@ const UserSchema = new Schema<IUserDocument>(
     mobile: { type: String, required: true, unique: true, trim: true },
     email: { type: String, trim: true, lowercase: true },
     role: { type: String, enum: ["customer", "admin"], default: "customer" },
+    loyaltyPoints: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

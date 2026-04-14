@@ -12,9 +12,12 @@ import {
   Package,
   Settings,
   Search,
+  Heart,
 } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
+import { useWishlistStore } from "@/store/wishlistStore";
+import { SearchOverlay } from "@/components/search/SearchOverlay";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -28,8 +31,10 @@ export function Navbar() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const itemCount = useCartStore((s) => s.itemCount());
+  const wishlistCount = useWishlistStore((s) => s.itemCount());
   const { user, logout, isLoggedIn, isAdmin } = useAuthStore();
 
   useEffect(() => {
@@ -110,12 +115,31 @@ export function Navbar() {
             {/* Right: Icons */}
             <div className="flex items-center justify-end gap-5">
               {/* Search icon */}
-              <button className="hidden md:flex items-center gap-1.5 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="hidden md:flex items-center gap-1.5 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
+              >
                 <Search className="w-[18px] h-[18px]" />
                 <span className="text-nav-link uppercase" style={{ fontWeight: 500 }}>
                   Search
                 </span>
               </button>
+
+              {/* Wishlist */}
+              <Link
+                href="/wishlist"
+                className="relative flex items-center gap-1.5 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
+              >
+                <Heart className="w-[18px] h-[18px]" />
+                <span className="hidden md:inline text-nav-link uppercase" style={{ fontWeight: 500 }}>
+                  Wishlist
+                </span>
+                {mounted && wishlistCount > 0 && (
+                  <span className="absolute -top-2 -right-2 md:-top-1.5 md:left-2.5 w-[18px] h-[18px] bg-luxe-sale text-white text-[9px] rounded-full flex items-center justify-center" style={{ fontWeight: 600 }}>
+                    {wishlistCount > 99 ? "99+" : wishlistCount}
+                  </span>
+                )}
+              </Link>
 
               {/* User Dropdown */}
               <div className="relative">
@@ -221,6 +245,9 @@ export function Navbar() {
           </div>
         )}
       </nav>
+
+      {/* Search Overlay */}
+      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
