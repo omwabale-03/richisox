@@ -200,7 +200,8 @@ export function Navbar() {
               {/* Search */}
               <button
                 onClick={() => setSearchOpen(true)}
-                className="hidden md:flex items-center gap-1.5 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
+                className="hidden md:flex items-center gap-1.5 nav-link-hover transition-colors duration-200"
+                style={{ color: "#5A5550", borderBottom: "2px solid transparent", paddingBottom: "2px" }}
               >
                 <Search className="w-[18px] h-[18px]" />
                 <span className="text-nav-link uppercase" style={{ fontWeight: 500 }}>Search</span>
@@ -209,7 +210,8 @@ export function Navbar() {
               {/* Wishlist */}
               <Link
                 href="/wishlist"
-                className="relative flex items-center gap-1.5 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
+                className="relative flex items-center gap-1.5 nav-link-hover transition-colors duration-200"
+                style={{ color: "#5A5550", borderBottom: "2px solid transparent", paddingBottom: "2px" }}
               >
                 <Heart className="w-[18px] h-[18px]" />
                 <span className="hidden md:inline text-nav-link uppercase" style={{ fontWeight: 500 }}>Wishlist</span>
@@ -224,7 +226,8 @@ export function Navbar() {
               <div className="relative hidden md:block">
                 <button
                   onClick={(e) => { e.stopPropagation(); setUserMenuOpen(!userMenuOpen); }}
-                  className="flex items-center gap-1.5 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
+                  className="flex items-center gap-1.5 nav-link-hover transition-colors duration-200"
+                  style={{ color: "#5A5550", borderBottom: "2px solid transparent", paddingBottom: "2px" }}
                 >
                   <User className="w-[18px] h-[18px]" />
                   <span className="text-nav-link uppercase" style={{ fontWeight: 500 }}>Account</span>
@@ -264,7 +267,8 @@ export function Navbar() {
               {/* Cart */}
               <Link
                 href="/cart"
-                className="relative flex items-center gap-1.5 text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
+                className="relative flex items-center gap-1.5 nav-link-hover transition-colors duration-200"
+                style={{ color: "#5A5550", borderBottom: "2px solid transparent", paddingBottom: "2px" }}
               >
                 <ShoppingBag className="w-[18px] h-[18px]" />
                 <span className="hidden md:inline text-nav-link uppercase" style={{ fontWeight: 500 }}>Bag</span>
