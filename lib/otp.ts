@@ -5,7 +5,17 @@ interface OTPEntry {
   expiresAt: number;
 }
 
-const otpStore = new Map<string, OTPEntry>();
+// Use globalThis so the OTP map survives Next.js dev recompilations
+// and persists across different route module loads
+const globalForOtp = globalThis as typeof globalThis & {
+  __otpStore?: Map<string, OTPEntry>;
+};
+
+if (!globalForOtp.__otpStore) {
+  globalForOtp.__otpStore = new Map<string, OTPEntry>();
+}
+
+const otpStore = globalForOtp.__otpStore;
 
 export function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();

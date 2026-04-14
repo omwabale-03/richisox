@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/authStore";
@@ -18,10 +18,11 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [devOtp, setDevOtp] = useState<string | null>(null);
 
-  if (isLoggedIn()) {
-    router.push("/");
-    return null;
-  }
+  useEffect(() => {
+    if (isLoggedIn()) {
+      router.push("/");
+    }
+  }, [isLoggedIn, router]);
 
   const handleSendOtp = async () => {
     if (!mobile || mobile.length !== 10) {
