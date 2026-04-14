@@ -140,7 +140,7 @@ export function Navbar() {
                     >
                       <Link
                         href={link.href}
-                        className="text-nav-link uppercase transition-colors duration-200"
+                        className="nav-link-hover text-nav-link uppercase transition-colors duration-200"
                         style={{
                           fontWeight: 500,
                           color: isActive ? "#C9A84C" : "#5A5550",
@@ -158,8 +158,13 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-nav-link uppercase text-luxe-text-secondary hover:text-luxe-text transition-colors duration-200"
-                    style={{ fontWeight: 500 }}
+                    className="nav-link-hover text-nav-link uppercase transition-colors duration-200"
+                    style={{
+                      fontWeight: 500,
+                      color: "#5A5550",
+                      borderBottom: "2px solid transparent",
+                      paddingBottom: "2px",
+                    }}
                   >
                     {link.label}
                   </Link>

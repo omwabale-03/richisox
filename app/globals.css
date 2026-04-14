@@ -131,6 +131,12 @@ button, input, select, textarea, div, a, img, span {
   color: #C9A84C !important;
 }
 
+/* Nav link hover — same gold color + underline as mega menu triggers */
+.nav-link-hover:hover {
+  color: #C9A84C !important;
+  border-bottom-color: #C9A84C !important;
+}
+
 /* Re-enable border-radius for mobile nav subcategory cards */
 .mobile-nav-card,
 .mobile-nav-card img {
